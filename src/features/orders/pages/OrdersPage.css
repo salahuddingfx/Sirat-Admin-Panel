@@ -1,0 +1,53 @@
+.orders-card {
+  padding: 0;
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders-table th {
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  background: var(--color-surface-soft);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.orders-table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.customer-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-cell small {
+  color: var(--color-text-muted);
+}
+
+.status-select {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  font-size: 0.875rem;
+  font-weight: 600;
+  outline: none;
+}
+
+.status-select:focus {
+  border-color: var(--color-primary);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
