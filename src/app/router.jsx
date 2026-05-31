@@ -4,21 +4,13 @@ import { FeaturePlaceholder } from "../components/layout/FeaturePlaceholder";
 import { Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings } from "lucide-react";
 
 import { OrdersPage } from "../features/orders/pages/OrdersPage";
+import { ProductsPage } from "../features/products/pages/ProductsPage";
 
 export function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<DashboardPage />} />
-      <Route 
-        path="/products" 
-        element={
-          <FeaturePlaceholder 
-            title="Products" 
-            description="Manage your collection, inventory and drops." 
-            icon={Boxes} 
-          />
-        } 
-      />
+      <Route path="/products" element={<ProductsPage />} />
       <Route path="/orders" element={<OrdersPage />} />
       <Route 
         path="/customers" 
