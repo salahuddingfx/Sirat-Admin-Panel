@@ -1,0 +1,86 @@
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--color-bg);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: 3rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.login-brand {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--color-text);
+  display: block;
+}
+
+.login-badge {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  background: rgba(127, 29, 29, 0.05);
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+.login-intro {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-intro h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.login-intro p {
+  color: var(--color-text-muted);
+  font-size: 0.9375rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.password-field {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 1rem;
+  top: 2.3rem; /* Adjusted for label */
+  color: var(--color-text-muted);
+  transition: var(--transition-fast);
+}
+
+.password-toggle:hover {
+  color: var(--color-text);
+}
+
+.login-submit {
+  width: 100%;
+  padding: 1rem;
+  margin-top: 0.5rem;
+}
