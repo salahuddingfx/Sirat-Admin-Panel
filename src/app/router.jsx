@@ -3,6 +3,8 @@ import { DashboardPage } from "../features/dashboard/pages/DashboardPage";
 import { FeaturePlaceholder } from "../components/layout/FeaturePlaceholder";
 import { Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings } from "lucide-react";
 
+import { OrdersPage } from "../features/orders/pages/OrdersPage";
+
 export function AppRouter() {
   return (
     <Routes>
@@ -17,16 +19,7 @@ export function AppRouter() {
           />
         } 
       />
-      <Route 
-        path="/orders" 
-        element={
-          <FeaturePlaceholder 
-            title="Orders" 
-            description="Track and fulfill customer orders." 
-            icon={ShoppingBag} 
-          />
-        } 
-      />
+      <Route path="/orders" element={<OrdersPage />} />
       <Route 
         path="/customers" 
         element={
