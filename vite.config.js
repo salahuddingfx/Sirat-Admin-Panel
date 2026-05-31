@@ -9,8 +9,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@sirat/ui": fileURLToPath(new URL("./src/lib/ui/index.js", import.meta.url)),
-      "@sirat/api": fileURLToPath(new URL("./src/api/index.js", import.meta.url))
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@ui": fileURLToPath(new URL("./src/components/ui", import.meta.url)),
+      "@api": fileURLToPath(new URL("./src/lib/api", import.meta.url))
     }
   }
 });
