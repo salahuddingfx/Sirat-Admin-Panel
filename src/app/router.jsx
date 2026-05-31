@@ -1,14 +1,16 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { DashboardPage } from "../features/dashboard/pages/DashboardPage";
 import { FeaturePlaceholder } from "../components/layout/FeaturePlaceholder";
 import { Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings } from "lucide-react";
 
-import { OrdersPage } from "../features/orders/pages/OrdersPage";
-import { ProductsPage } from "../features/products/pages/ProductsPage";
+const DashboardPage = lazy(() => import("../features/dashboard/pages/DashboardPage").then(module => ({ default: module.DashboardPage })));
+const OrdersPage = lazy(() => import("../features/orders/pages/OrdersPage").then(module => ({ default: module.OrdersPage })));
+const ProductsPage = lazy(() => import("../features/products/pages/ProductsPage").then(module => ({ default: module.ProductsPage })));
 
 export function AppRouter() {
   return (
-    <Routes>
+    <Suspense fallback={<div className="admin-loader" />}>
+      <Routes>
       <Route path="/" element={<DashboardPage />} />
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/orders" element={<OrdersPage />} />
