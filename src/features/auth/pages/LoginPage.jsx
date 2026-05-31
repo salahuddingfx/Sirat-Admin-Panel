@@ -12,7 +12,7 @@ export function LoginPage({ onLogin }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (email && password) {
-      onLogin({ email });
+      onLogin({ email, password });
     }
   };
 

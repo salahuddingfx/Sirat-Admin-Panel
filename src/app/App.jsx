@@ -1,20 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppShell } from "../components/layout/AppShell";
 import { LoginPage } from "../features/auth/pages/LoginPage";
 import { AppRouter } from "./router";
 import { navItems } from "../features/dashboard/data/mockData";
 import { Button } from "../components/ui";
 import { MessageSquare } from "lucide-react";
+import { login } from "../lib/api/queries";
 
 export function App() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("sirat_admin_user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
-  const handleLogin = (userData) => {
-    setUser(userData);
+  const handleLogin = async (credentials) => {
+    try {
+      const response = await login(credentials);
+      if (response.success && response.data.user.role === 'admin') {
+        const { user, token } = response.data;
+        setUser(user);
+        localStorage.setItem("sirat_admin_user", JSON.stringify(user));
+        localStorage.setItem("sirat_admin_token", token);
+      } else {
+        alert("Login failed or not an admin.");
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Invalid credentials.");
+    }
   };
 
   const handleLogout = () => {
     setUser(null);
+    localStorage.removeItem("sirat_admin_user");
+    localStorage.removeItem("sirat_admin_token");
   };
 
   if (!user) {

@@ -1,26 +1,37 @@
 import { useState, useEffect } from "react";
 import { ArrowRight, BarChart3, Boxes, ShoppingBag } from "lucide-react";
 import { Button, MetricCard, Card, SectionHeader, Badge } from "../../../components/ui";
-import { orders as mockOrders, products } from "../data/mockData";
+import { fetchStats } from "../../../lib/api/queries";
 import "./DashboardPage.css";
 
 export function DashboardPage() {
-  const [orders, setOrders] = useState(mockOrders);
+  const [stats, setStats] = useState({
+    revenue: 0,
+    orderCount: 0,
+    userCount: 0,
+    lowStockCount: 0,
+    recentOrders: []
+  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Attempt to load "real" orders from the storefront's localStorage
-    try {
-      const storedOrders = JSON.parse(localStorage.getItem("sirat_orders") || "[]");
-      if (storedOrders.length > 0) {
-        // Combine real orders with mock orders, putting real ones first
-        // We limit to 5 recent for the dashboard view
-        const combined = [...storedOrders.reverse(), ...mockOrders].slice(0, 5);
-        setOrders(combined);
+    const loadStats = async () => {
+      try {
+        const response = await fetchStats();
+        if (response.success) {
+          setStats(response.data);
+        }
+      } catch (err) {
+        console.error("Failed to load stats:", err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Failed to load orders from localStorage", err);
-    }
+    };
+    loadStats();
   }, []);
+
+  if (loading) return <div>Loading dashboard...</div>;
+
   return (
     <div className="dashboard">
       <SectionHeader
@@ -46,10 +57,10 @@ export function DashboardPage() {
       </div>
 
       <div className="metrics-grid">
-        <MetricCard label="Revenue" value="$48.2k" delta="+12.4% this week" />
-        <MetricCard label="Orders" value="1,284" delta="+8.1% this week" />
-        <MetricCard label="Conversion" value="4.9%" delta="+0.7% this week" />
-        <MetricCard label="Low stock" value="12" delta="Needs attention" />
+        <MetricCard label="Revenue" value={`৳${stats.revenue}`} delta="Total lifetime" />
+        <MetricCard label="Orders" value={stats.orderCount.toString()} delta="Total lifetime" />
+        <MetricCard label="Customers" value={stats.userCount.toString()} delta="Registered users" />
+        <MetricCard label="Low stock" value={stats.lowStockCount.toString()} delta="Needs attention" />
       </div>
 
       <div className="content-grid">
@@ -61,16 +72,16 @@ export function DashboardPage() {
             className="panel-header"
           />
           <div className="activity-list">
-            {orders.map((order) => (
-              <div key={order.orderId || order.id} className="activity-item">
+            {stats.recentOrders.map((order) => (
+              <div key={order._id} className="activity-item">
                 <div className="item-info">
-                  <span className="item-id">{order.orderId || order.id}</span>
-                  <span className="item-meta">{order.name || order.customer}</span>
+                  <span className="item-id">{order.orderId}</span>
+                  <span className="item-meta">{order.user?.name || order.guestInfo?.name}</span>
                 </div>
-                <Badge variant={order.status === 'Packed' || order.status === 'received' ? 'success' : 'warning'}>
+                <Badge variant={order.status === 'delivered' ? 'success' : 'warning'}>
                   {order.status}
                 </Badge>
-                <span className="item-amount">{order.estimatedTotal ? `৳${order.estimatedTotal}` : order.total}</span>
+                <span className="item-amount">৳{order.totalAmount}</span>
               </div>
             ))}
           </div>
