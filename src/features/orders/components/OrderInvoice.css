@@ -1,0 +1,123 @@
+.invoice-container {
+  padding: 40px;
+  background: white;
+  color: black;
+  font-family: 'Inter', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.invoice-brand h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  letter-spacing: -2px;
+}
+
+.invoice-brand p {
+  margin: 0;
+  color: #666;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.invoice-info {
+  text-align: right;
+}
+
+.invoice-info h2 {
+  margin: 0;
+  color: #7F1D1D;
+  font-size: 1.5rem;
+}
+
+.invoice-billing {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.invoice-billing h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+.invoice-billing p {
+  margin: 2px 0;
+  font-size: 0.95rem;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.invoice-table th {
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  padding: 10px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.invoice-table td {
+  padding: 10px;
+  border-bottom: 1px solid #fafafa;
+  font-size: 0.9rem;
+}
+
+.invoice-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  width: 200px;
+}
+
+.summary-row.total {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.invoice-footer {
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+  color: #999;
+  font-size: 0.8rem;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .invoice-container, .invoice-container * {
+    visibility: visible;
+  }
+  .invoice-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
