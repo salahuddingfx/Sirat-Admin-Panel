@@ -1,9 +1,26 @@
+import { useState, useEffect } from "react";
 import { ArrowRight, BarChart3, Boxes, ShoppingBag } from "lucide-react";
 import { Button, MetricCard, Card, SectionHeader, Badge } from "../../../components/ui";
-import { orders, products } from "../data/mockData";
+import { orders as mockOrders, products } from "../data/mockData";
 import "./DashboardPage.css";
 
 export function DashboardPage() {
+  const [orders, setOrders] = useState(mockOrders);
+
+  useEffect(() => {
+    // Attempt to load "real" orders from the storefront's localStorage
+    try {
+      const storedOrders = JSON.parse(localStorage.getItem("sirat_orders") || "[]");
+      if (storedOrders.length > 0) {
+        // Combine real orders with mock orders, putting real ones first
+        // We limit to 5 recent for the dashboard view
+        const combined = [...storedOrders.reverse(), ...mockOrders].slice(0, 5);
+        setOrders(combined);
+      }
+    } catch (err) {
+      console.error("Failed to load orders from localStorage", err);
+    }
+  }, []);
   return (
     <div className="dashboard">
       <SectionHeader
@@ -45,15 +62,15 @@ export function DashboardPage() {
           />
           <div className="activity-list">
             {orders.map((order) => (
-              <div key={order.id} className="activity-item">
+              <div key={order.orderId || order.id} className="activity-item">
                 <div className="item-info">
-                  <span className="item-id">{order.id}</span>
-                  <span className="item-meta">{order.customer}</span>
+                  <span className="item-id">{order.orderId || order.id}</span>
+                  <span className="item-meta">{order.name || order.customer}</span>
                 </div>
-                <Badge variant={order.status === 'Packed' ? 'success' : 'warning'}>
+                <Badge variant={order.status === 'Packed' || order.status === 'received' ? 'success' : 'warning'}>
                   {order.status}
                 </Badge>
-                <span className="item-amount">{order.total}</span>
+                <span className="item-amount">{order.estimatedTotal ? `৳${order.estimatedTotal}` : order.total}</span>
               </div>
             ))}
           </div>
