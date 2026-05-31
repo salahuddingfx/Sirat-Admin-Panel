@@ -1,4 +1,4 @@
-import { Card, SectionHeader } from "../../../components/ui";
+import { Card, SectionHeader } from "../ui";
 import { motion } from "framer-motion";
 
 export function FeaturePlaceholder({ title, description, icon: Icon }) {
