@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Button, MetricCard, Panel, SectionHeader, AppShell } from "./lib/ui";
-import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings2, ArrowRight } from "lucide-react";
+import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings2, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 const navItems = [
   { label: "Dashboard", href: "/" },
@@ -124,12 +125,164 @@ function NotFoundPage() {
 }
 
 export function App() {
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [adminEmail, setAdminEmail] = useState("");
+  const [adminPass, setAdminPass] = useState("");
+  const [showAdminPass, setShowAdminPass] = useState(false);
+
+  const handleAdminLogin = (e) => {
+    e.preventDefault();
+    if (adminEmail && adminPass) {
+      setIsAdminLoggedIn(true);
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdminLoggedIn(false);
+    setAdminEmail("");
+    setAdminPass("");
+  };
+
+  if (!isAdminLoggedIn) {
+    return (
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#FAF9F5",
+        padding: "2rem",
+        fontFamily: "'Plus Jakarta Sans', sans-serif"
+      }}>
+        <div style={{
+          width: "100%",
+          maxWidth: "540px",
+          padding: "2.5rem 3rem",
+          background: "#FFFFFF",
+          borderRadius: "20px",
+          border: "1px solid rgba(197, 160, 89, 0.15)",
+          boxShadow: "0 16px 48px rgba(197, 160, 89, 0.05)"
+        }}>
+          {/* Logo Brand */}
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <span style={{
+              fontFamily: "'Space Grotesk', sans-serif",
+              fontSize: "2.2rem",
+              fontWeight: "900",
+              letterSpacing: "-0.03em",
+              color: "#141311",
+              display: "block"
+            }}>SIRAT</span>
+            <span style={{
+              fontSize: "0.75rem",
+              color: "#C5A059",
+              background: "rgba(197, 160, 89, 0.08)",
+              padding: "0.25rem 0.75rem",
+              borderRadius: "99px",
+              fontWeight: "700",
+              letterSpacing: "0.03em",
+              marginTop: "0.35rem",
+              display: "inline-block"
+            }}>
+              ADMIN COMMAND CENTER
+            </span>
+          </div>
+
+          <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
+            <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: "1.75rem", fontWeight: "750", margin: "0 0 0.4rem", color: "#141311" }}>Sign In</h2>
+            <p style={{ fontSize: "0.85rem", color: "#5A5650", margin: 0 }}>Access control room and manage fashion drops.</p>
+          </div>
+
+          <form onSubmit={handleAdminLogin} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+              <label htmlFor="admin-email" style={{ fontSize: "0.85rem", fontWeight: "600", color: "#141311" }}>Email Address</label>
+              <input
+                id="admin-email"
+                type="email"
+                required
+                value={adminEmail}
+                onChange={(e) => setAdminEmail(e.target.value)}
+                placeholder="admin@siratclothing.com"
+                style={{
+                  padding: "0.75rem 1.2rem",
+                  borderRadius: "99px",
+                  border: "1px solid rgba(197, 160, 89, 0.15)",
+                  outline: "none",
+                  fontSize: "0.9rem",
+                  background: "#FAF9F5",
+                  width: "100%",
+                  color: "#141311",
+                  boxSizing: "border-box"
+                }}
+              />
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.45rem" }}>
+              <label htmlFor="admin-pass" style={{ fontSize: "0.85rem", fontWeight: "600", color: "#141311" }}>Password</label>
+              <div style={{ position: "relative" }}>
+                <input
+                  id="admin-pass"
+                  type={showAdminPass ? "text" : "password"}
+                  required
+                  value={adminPass}
+                  onChange={(e) => setAdminPass(e.target.value)}
+                  placeholder="••••••••"
+                  style={{
+                    padding: "0.75rem 3.2rem 0.75rem 1.2rem",
+                    borderRadius: "99px",
+                    border: "1px solid rgba(197, 160, 89, 0.15)",
+                    outline: "none",
+                    fontSize: "0.9rem",
+                    background: "#FAF9F5",
+                    width: "100%",
+                    color: "#141311",
+                    boxSizing: "border-box"
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowAdminPass(!showAdminPass)}
+                  style={{
+                    position: "absolute",
+                    right: "1.2rem",
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "#5A5650",
+                    display: "flex",
+                    alignItems: "center"
+                  }}
+                  aria-label={showAdminPass ? "Hide password" : "Show password"}
+                >
+                  {showAdminPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <Button type="submit" style={{ width: "100%", marginTop: "0.5rem", minHeight: "44px", borderRadius: "99px", boxSizing: "border-box" }}>
+              Enter Console <ArrowRight size={14} style={{ marginLeft: "4px" }} />
+            </Button>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <AppShell
       brand="SIRAT"
       tagline="Admin command center"
       navItems={navItems}
-      rightSlot={<span className="admin-status"><MessageSquare size={14} /> Support online</span>}
+      rightSlot={
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <span className="admin-status"><MessageSquare size={14} /> Support online</span>
+          <Button variant="outline" onClick={handleAdminLogout} style={{ padding: "0.35rem 0.85rem", fontSize: "0.78rem", minHeight: "auto", height: "30px", borderRadius: "99px" }}>
+            Log Out
+          </Button>
+        </div>
+      }
     >
       <Routes>
         <Route path="/" element={<DashboardPage />} />
