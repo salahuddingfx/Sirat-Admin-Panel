@@ -1,0 +1,50 @@
+import { useState } from "react";
+import { AppShell } from "../components/layout/AppShell";
+import { LoginPage } from "../features/auth/pages/LoginPage";
+import { AppRouter } from "./router";
+import { navItems } from "../features/dashboard/data/mockData";
+import { Button } from "../components/ui";
+import { MessageSquare } from "lucide-react";
+
+export function App() {
+  const [user, setUser] = useState(null);
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  if (!user) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
+  return (
+    <AppShell
+      brand="SIRAT"
+      tagline="Admin Command Center"
+      navItems={navItems}
+      rightSlot={
+        <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+          <span style={{ 
+            fontSize: '0.8125rem', 
+            fontWeight: 600, 
+            color: 'var(--color-success)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.35rem'
+          }}>
+            <MessageSquare size={14} /> Support online
+          </span>
+          <Button variant="outline" onClick={handleLogout} style={{ padding: "0.4rem 1rem", fontSize: "0.8125rem" }}>
+            Log Out
+          </Button>
+        </div>
+      }
+    >
+      <AppRouter />
+    </AppShell>
+  );
+}
