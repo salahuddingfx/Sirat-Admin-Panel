@@ -63,12 +63,12 @@ export function ProductsPage() {
           <Card key={product._id} className="admin-product-card">
             <div className="product-image">
               {product.images?.[0] ? (
-                <img src={product.images[0]} alt={product.name} />
+                <img src={product.images[0]} alt={product?.name || 'Product'} />
               ) : (
                 <div className="image-placeholder"><ImageIcon size={40} /></div>
               )}
-              <Badge variant={product.status === 'Live' ? 'success' : 'warning'} className="status-badge">
-                {product.status}
+              <Badge variant={product?.status === 'Live' ? 'success' : 'warning'} className="status-badge">
+                {product?.status}
               </Badge>
             </div>
             <div className="product-info">
