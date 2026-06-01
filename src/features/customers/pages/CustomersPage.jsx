@@ -9,19 +9,24 @@ export default function CustomersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const loadUsers = async () => {
+  const loadUsers = async (signal) => {
     try {
-      const res = await fetchAllUsers();
+      const res = await fetchAllUsers({ signal });
       if (res.success) setUsers(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error(err);
+        triggerAdminToast("Failed to load users", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadUsers();
+    const controller = new AbortController();
+    loadUsers(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleRoleChange = async (id, newRole) => {
