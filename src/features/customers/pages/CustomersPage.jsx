@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { User, Shield, Trash2, Mail, Phone } from "lucide-react";
 import { fetchAllUsers, updateUserRole, adminDeleteUser } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export default function CustomersPage() {
   const [users, setUsers] = useState([]);
@@ -27,8 +28,9 @@ export default function CustomersPage() {
     try {
       await updateUserRole(id, newRole);
       setUsers(users.map((u) => u._id === id ? { ...u, role: newRole } : u));
+      triggerAdminToast("User role updated", "success");
     } catch (err) {
-      alert("Failed to update role");
+      triggerAdminToast("Failed to update role", "error");
     }
   };
 
@@ -37,8 +39,9 @@ export default function CustomersPage() {
     try {
       await adminDeleteUser(id);
       setUsers(users.filter((u) => u._id !== id));
+      triggerAdminToast("User deleted successfully", "success");
     } catch (err) {
-      alert("Failed to delete user");
+      triggerAdminToast("Failed to delete user", "error");
     }
   };
 
