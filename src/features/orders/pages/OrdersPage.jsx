@@ -4,7 +4,7 @@ import { Printer, Eye, ShoppingBag } from "lucide-react";
 import { fetchOrders, updateOrderStatus } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
-import "./OrdersPage.css";
+import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
 
 export function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -62,17 +62,17 @@ export function OrdersPage() {
   return (
     <div className="orders-page">
       <SectionHeader
-        eyebrow="Operations"
-        title="Order Management"
-        description="Fulfill orders, update shipping states, and generate invoices."
+        eyebrow={UI_STRINGS.orders.eyebrow}
+        title={UI_STRINGS.orders.title}
+        description={UI_STRINGS.orders.description}
       />
 
       <Card className="orders-card">
         {orders?.length === 0 ? (
           <div style={{ padding: "3rem", textAlign: "center" }}>
             <ShoppingBag size={48} className="muted" style={{ margin: "0 auto 1rem" }} />
-            <h3>No orders found</h3>
-            <p className="muted">Your order ledger is currently empty.</p>
+            <h3>{UI_STRINGS.orders.noItems}</h3>
+            <p className="muted">{UI_STRINGS.orders.noItemsDesc}</p>
           </div>
         ) : (
           <table className="orders-table">
@@ -98,7 +98,8 @@ export function OrdersPage() {
                     </div>
                   </td>
                   <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                  <td>৳{order.totalAmount}</td>
+                  <td>{CURRENCY_SYMBOL}{order.totalAmount}</td>
+
                   <td>
                     <Badge variant="primary">{order.paymentMethod.toUpperCase()}</Badge>
                   </td>

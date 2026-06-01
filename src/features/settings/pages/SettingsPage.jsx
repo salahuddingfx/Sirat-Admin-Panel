@@ -174,41 +174,28 @@ export function SettingsPage() {
         description="Configure storefront metadata, logos, payment checkout phone numbers, and social URLs."
       />
 
-      <form onSubmit={handleSubmit} style={{ marginTop: "2rem", display: "grid", gap: "2rem" }}>
-        
+      <form onSubmit={handleSubmit} style={FORM_CONTAINER_STYLE}>
+
         {/* Branding & Logo */}
-        <Card className="product-card" style={{ padding: "2rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+        <Card className="product-card" style={CARD_PADDING_STYLE}>
+          <div style={SECTION_HEADER_STYLE}>
             <Globe className="accent" size={20} />
-            <h3 style={{ margin: 0 }}>Branding & Logo</h3>
+            <h3 style={SECTION_TITLE_STYLE}>Branding & Logo</h3>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: "2rem", alignItems: "start" }}>
-            
+          <div style={BRANDING_GRID_STYLE}>
+
             {/* Logo Upload Box */}
             <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               <span className="input-label" style={{ fontWeight: 600 }}>Website Logo</span>
-              <div 
-                style={{ 
-                  width: "100%", 
-                  height: "150px", 
-                  border: "2px dashed var(--color-border-strong)", 
-                  borderRadius: "12px",
-                  display: "flex", 
-                  flexDirection: "column",
-                  alignItems: "center", 
-                  justifyContent: "center",
-                  background: "var(--color-bg)",
-                  cursor: "pointer",
-                  overflow: "hidden",
-                  position: "relative"
-                }}
+              <div
+                style={LOGO_BOX_STYLE}
                 onClick={() => fileInputRef.current.click()}
               >
                 {logoPreview || settings.logo ? (
-                  <img 
-                    src={logoPreview || settings.logo} 
-                    alt="Store Logo" 
-                    style={{ width: "100%", height: "100%", objectFit: "contain", padding: "10px" }} 
+                  <img
+                    src={logoPreview || settings.logo}
+                    alt="Store Logo"
+                    style={LOGO_IMAGE_STYLE}
                   />
                 ) : (
                   <>
@@ -216,19 +203,19 @@ export function SettingsPage() {
                     <span style={{ fontSize: "0.75rem", fontWeight: 600, color: "var(--color-text-muted)" }}>Upload Logo</span>
                   </>
                 )}
-                
-                <div style={{ position: "absolute", bottom: "8px", right: "8px", background: "rgba(0,0,0,0.6)", padding: "4px 8px", borderRadius: "4px", display: "flex", alignItems: "center", gap: "4px", color: "#fff", fontSize: "10px" }}>
+
+                <div style={LOGO_UPLOAD_OVERLAY}>
                   <Upload size={10} /> Choose
                 </div>
               </div>
-              <input 
-                type="file" 
-                ref={fileInputRef} 
-                hidden 
-                accept="image/*" 
-                onChange={handleLogoChange} 
+              <input
+                type="file"
+                ref={fileInputRef}
+                hidden
+                accept="image/*"
+                onChange={handleLogoChange}
               />
-              <span className="muted" style={{ fontSize: "0.7rem" }}>PNG or WebP with transparent background recommended.</span>
+              <span className="muted" style={LOGO_CASH_HELP}>PNG or WebP with transparent background recommended.</span>
             </div>
 
             <div style={{ display: "grid", gap: "1.25rem" }}>
@@ -259,12 +246,12 @@ export function SettingsPage() {
         </Card>
 
         {/* Contact Info */}
-        <Card className="product-card" style={{ padding: "2rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+        <Card className="product-card" style={CARD_PADDING_STYLE}>
+          <div style={SECTION_HEADER_STYLE}>
             <Phone className="accent" size={20} />
-            <h3 style={{ margin: 0 }}>Contact Details</h3>
+            <h3 style={SECTION_TITLE_STYLE}>Contact Details</h3>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+          <div style={CONTACT_GRID_STYLE}>
             <Input
               label="Contact Phone"
               name="phone"
@@ -296,12 +283,12 @@ export function SettingsPage() {
         </Card>
 
         {/* Payment Configuration */}
-        <Card className="product-card" style={{ padding: "2rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+        <Card className="product-card" style={CARD_PADDING_STYLE}>
+          <div style={SECTION_HEADER_STYLE}>
             <CreditCard className="accent" size={20} />
-            <h3 style={{ margin: 0 }}>Mobile Merchant Numbers</h3>
+            <h3 style={SECTION_TITLE_STYLE}>Mobile Merchant Numbers</h3>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
+          <div style={PAYMENT_GRID_STYLE}>
             <Input
               label="bKash Personal/Merchant Number"
               name="bkashNumber"
@@ -327,12 +314,12 @@ export function SettingsPage() {
         </Card>
 
         {/* Social Links */}
-        <Card className="product-card" style={{ padding: "2rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" }}>
+        <Card className="product-card" style={CARD_PADDING_STYLE}>
+          <div style={SECTION_HEADER_STYLE}>
             <Share2 className="accent" size={20} />
-            <h3 style={{ margin: 0 }}>Social Media Links</h3>
+            <h3 style={SECTION_TITLE_STYLE}>Social Media Links</h3>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+          <div style={SOCIAL_GRID_STYLE}>
             <Input
               label="Facebook Page URL"
               name="facebook"
@@ -386,7 +373,7 @@ export function SettingsPage() {
         </Card>
 
         {/* Action Button */}
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div style={ACTION_CONTAINER_STYLE}>
           <Button type="submit" disabled={isSaving} style={{ gap: "0.5rem" }}>
             <Save size={18} /> {isSaving ? "Saving Configuration..." : "Save Settings"}
           </Button>

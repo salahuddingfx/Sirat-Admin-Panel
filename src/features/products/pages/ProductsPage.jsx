@@ -4,7 +4,7 @@ import { fetchProducts, deleteProduct, createProduct, updateProduct, fetchCatego
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
-import "./ProductsPage.css";
+import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
 
 export function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -58,12 +58,12 @@ export function ProductsPage() {
   return (
     <div className="products-page">
       <SectionHeader
-        eyebrow="Inventory"
-        title="Product Catalog"
-        description="Manage your drops, track stock levels, and update pricing."
+        eyebrow={UI_STRINGS.products.eyebrow}
+        title={UI_STRINGS.products.title}
+        description={UI_STRINGS.products.description}
       >
         <Button onClick={() => { setEditingProduct(null); setShowModal(true); }}>
-          <Plus size={18} /> Add Product
+          <Plus size={18} /> {UI_STRINGS.products.addButton}
         </Button>
       </SectionHeader>
 
@@ -71,8 +71,8 @@ export function ProductsPage() {
         {products?.length === 0 ? (
           <Card className="empty-state-card" style={{ gridColumn: "1 / -1", padding: "3rem", textAlign: "center" }}>
             <ImageIcon size={48} className="muted" style={{ margin: "0 auto 1rem" }} />
-            <h3>No products found</h3>
-            <p className="muted">Start by adding your first drop to the catalog.</p>
+            <h3>{UI_STRINGS.products.noItems}</h3>
+            <p className="muted">{UI_STRINGS.products.noItemsDesc}</p>
           </Card>
         ) : (
           products?.map((product) => (
@@ -94,10 +94,10 @@ export function ProductsPage() {
                 <span className="price-container">
                   {product?.oldPrice && product?.oldPrice > product?.price && (
                     <span className="original-price" style={{ textDecoration: "line-through", color: "var(--color-text-muted)", marginRight: "8px", fontSize: "0.85em" }}>
-                      ৳{product?.oldPrice}
+                      {CURRENCY_SYMBOL}{product?.oldPrice}
                     </span>
                   )}
-                  <span className="price">৳{product?.price}</span>
+                  <span className="price">{CURRENCY_SYMBOL}{product?.price}</span>
                 </span>
                 <span className="stock">{product?.stock} in stock</span>
               </div>
