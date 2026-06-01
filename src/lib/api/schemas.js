@@ -55,5 +55,9 @@ export const settingsSchema = z.object({
   logo: z.string().optional().nullable().or(z.literal("")),
   bkashNumber: z.string().optional().nullable().or(z.literal("")),
   nagadNumber: z.string().optional().nullable().or(z.literal("")),
-  rocketNumber: z.string().optional().nullable().or(z.literal(""))
+  rocketNumber: z.string().optional().nullable().or(z.literal("")),
+  pinterest: z.string().optional().nullable().or(z.literal("")),
+  youtube: z.string().optional().nullable().or(z.literal("")),
+  tiktok: z.string().optional().nullable().or(z.literal("")),
+  twitter: z.string().optional().nullable().or(z.literal(""))
 });
