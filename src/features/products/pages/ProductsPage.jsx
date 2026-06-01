@@ -9,6 +9,7 @@ import "./ProductsPage.css";
 export function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
@@ -37,6 +38,7 @@ export function ProductsPage() {
   const handleDelete = async (id) => {
     triggerAdminConfirm("Are you sure you want to delete this product?", async () => {
       try {
+        setIsProcessing(true);
         const response = await deleteProduct(id);
         if (response.success) {
           loadProducts();
@@ -45,6 +47,8 @@ export function ProductsPage() {
       } catch (err) {
         console.error("Failed to delete product:", err);
         triggerAdminToast("Failed to delete product", "error");
+      } finally {
+        setIsProcessing(false);
       }
     });
   };
