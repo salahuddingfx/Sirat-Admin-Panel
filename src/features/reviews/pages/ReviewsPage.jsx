@@ -73,14 +73,14 @@ export default function ReviewsPage() {
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", color: "var(--sirat-gold)", marginBottom: "0.75rem" }}>
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={14} fill={i < rev.rating ? "currentColor" : "none"} />
+                        <Star key={i} size={14} fill={i < (rev?.rating || 0) ? "currentColor" : "none"} />
                       ))}
                       <span style={{ marginLeft: "0.5rem", color: "var(--sirat-muted)", fontSize: "0.875rem" }}>
-                        for <strong>{rev.product?.name || "Deleted Product"}</strong>
+                        for <strong>{rev?.product?.name || "Deleted Product"}</strong>
                       </span>
                     </div>
                     <p style={{ margin: 0, fontSize: "0.9375rem", lineHeight: "1.5", color: "var(--sirat-text-main)" }}>
-                      "{rev.comment}"
+                      "{rev?.comment}"
                     </p>
                   </div>
                   <div style={{ display: "flex", gap: "0.5rem", marginLeft: "2rem" }}>
