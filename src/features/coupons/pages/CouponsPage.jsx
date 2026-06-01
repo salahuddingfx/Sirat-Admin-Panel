@@ -43,28 +43,44 @@ export default function CouponsPage() {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    data.isActive = formData.get("isActive") === "on";
-    data.discountValue = parseFloat(data.discountValue);
-    data.minPurchase = parseFloat(data.minPurchase) || 0;
     
+    // Proper data type conversions
+    data.isActive = formData.get("isActive") === "on";
+    data.discountValue = Number(data.discountValue);
+    data.minPurchase = Number(data.minPurchase) || 0;
+    
+    // Validation
+    if (isNaN(data.discountValue)) {
+        triggerAdminToast("Invalid discount value", "error");
+        return;
+    }
+
     // Remove empty strings for Date fields to avoid Mongoose cast errors
-    if (!data.expiryDate) {
+    if (!data.expiryDate || data.expiryDate.trim() === "") {
         delete data.expiryDate;
     }
 
     setIsSubmitting(true);
     try {
+      let res;
       if (currentCoupon) {
-        await updateCoupon(currentCoupon._id, data);
-        triggerAdminToast("Coupon updated", "success");
+        res = await updateCoupon(currentCoupon._id, data);
+        if (res.success) triggerAdminToast("Coupon updated successfully", "success");
       } else {
-        await createCoupon(data);
-        triggerAdminToast("Coupon created", "success");
+        res = await createCoupon(data);
+        if (res.success) triggerAdminToast("Coupon created successfully", "success");
       }
-      setIsModalOpen(false);
-      loadCoupons();
+      
+      if (res.success) {
+          setIsModalOpen(false);
+          loadCoupons();
+      } else {
+          triggerAdminToast(res.message || "Operation failed", "error");
+      }
     } catch (err) {
-      triggerAdminToast(err.response?.data?.message || "Failed to save coupon", "error");
+      console.error("Coupon save error:", err);
+      const errMsg = err.response?.data?.message || err.message || "Failed to save coupon";
+      triggerAdminToast(errMsg, "error");
     } finally {
       setIsSubmitting(false);
     }
