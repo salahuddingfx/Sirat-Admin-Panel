@@ -100,6 +100,7 @@ export function OrdersPage() {
                     value={order.status}
                     onChange={(e) => handleStatusChange(order._id, e.target.value)}
                     className="status-select"
+                    disabled={isProcessing}
                   >
                     <option value="received">Received</option>
                     <option value="confirmed">Confirmed</option>
