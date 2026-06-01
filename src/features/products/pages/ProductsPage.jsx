@@ -55,7 +55,7 @@ export function ProductsPage() {
       </SectionHeader>
 
       <div className="products-grid">
-        {products.map((product) => (
+        {products?.map((product) => (
           <Card key={product._id} className="admin-product-card">
             <div className="product-image">
               {product.images?.[0] ? (
