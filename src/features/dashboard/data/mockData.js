@@ -1,8 +1,9 @@
-import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Layout, Mail, TrendingUp, Settings } from "lucide-react";
+import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Layout, Mail, TrendingUp, Settings, Tag } from "lucide-react";
 
 export const navItems = [
   { label: "Dashboard", href: "/", icon: BarChart3 },
   { label: "Products", href: "/products", icon: Boxes },
+  { label: "Categories", href: "/categories", icon: Tag },
   { label: "Orders", href: "/orders", icon: ShoppingBag },
   { label: "Sales", href: "/sales", icon: TrendingUp },
   { label: "Hero Slider", href: "/hero", icon: Layout },
