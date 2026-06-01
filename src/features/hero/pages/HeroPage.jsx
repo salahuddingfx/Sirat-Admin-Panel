@@ -28,14 +28,15 @@ export default function HeroPage() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this slide?")) return;
-    try {
-      await deleteHeroSlide(id);
-      setSlides(slides.filter((s) => s._id !== id));
-      triggerAdminToast("Slide deleted successfully", "success");
-    } catch (err) {
-      triggerAdminToast("Failed to delete slide", "error");
-    }
+    triggerAdminConfirm("Are you sure you want to delete this slide?", async () => {
+        try {
+          await deleteHeroSlide(id);
+          setSlides(slides.filter((s) => s._id !== id));
+          triggerAdminToast("Slide deleted successfully", "success");
+        } catch (err) {
+          triggerAdminToast("Failed to delete slide", "error");
+        }
+    });
   };
 
   const handleSubmit = async (e) => {
