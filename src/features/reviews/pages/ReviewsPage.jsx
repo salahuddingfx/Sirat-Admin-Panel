@@ -65,10 +65,10 @@ export default function ReviewsPage() {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "0.5rem" }}>
-                      <strong style={{ fontSize: "1.1rem" }}>{rev.name}</strong>
-                      <span className="muted" style={{ fontSize: "0.8rem" }}>{new Date(rev.createdAt).toLocaleDateString()}</span>
-                      <span className={`badge ${rev.isApproved ? "badge-success" : "badge-outline"}`}>
-                        {rev.isApproved ? "Approved" : "Pending Approval"}
+                      <strong style={{ fontSize: "1.1rem" }}>{rev?.name}</strong>
+                      <span className="muted" style={{ fontSize: "0.8rem" }}>{rev?.createdAt ? new Date(rev.createdAt).toLocaleDateString() : 'N/A'}</span>
+                      <span className={`badge ${rev?.isApproved ? "badge-success" : "badge-outline"}`}>
+                        {rev?.isApproved ? "Approved" : "Pending Approval"}
                       </span>
                     </div>
                     <div style={{ display: "flex", alignItems: "center", gap: "0.25rem", color: "var(--sirat-gold)", marginBottom: "0.75rem" }}>
