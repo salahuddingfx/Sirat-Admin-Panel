@@ -89,7 +89,7 @@ export function SalesPage() {
       shipping += (o.shippingCharge || 0);
       
       // Calculate revenue & cost at item level
-      o.items.forEach(item => {
+      o.items?.forEach(item => {
         const itemPrice = item.price || 0;
         const itemQty = item.quantity || 0;
         revenue += itemPrice * itemQty;
@@ -119,7 +119,7 @@ export function SalesPage() {
       }
       
       // Accumulate product-only revenue (excluding shipping charge)
-      o.items.forEach(item => {
+      o.items?.forEach(item => {
         grouped[dateStr].revenue += (item.price * item.quantity);
       });
       grouped[dateStr].orders += 1;
@@ -178,7 +178,7 @@ export function SalesPage() {
       const date = new Date(o.createdAt).toLocaleDateString();
       const customer = o.user?.name || o.guestInfo?.name || "Guest User";
       const payment = o.paymentMethod?.toUpperCase();
-      const itemsCount = o.items.reduce((sum, item) => sum + item.quantity, 0);
+      const itemsCount = (o.items || []).reduce((sum, item) => sum + item.quantity, 0);
       const shipping = o.shippingCharge || 0;
       const netSales = o.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       const total = o.totalAmount;
