@@ -75,7 +75,14 @@ export function ProductsPage() {
               <h3>{product.name}</h3>
               <p className="category">{product.category}</p>
               <div className="price-row">
-                <span className="price">৳{product.price}</span>
+                <span className="price-container">
+                  {product.oldPrice && product.oldPrice > product.price && (
+                    <span className="original-price" style={{ textDecoration: "line-through", color: "var(--color-text-muted)", marginRight: "8px", fontSize: "0.85em" }}>
+                      ৳{product.oldPrice}
+                    </span>
+                  )}
+                  <span className="price">৳{product.price}</span>
+                </span>
                 <span className="stock">{product.stock} in stock</span>
               </div>
               <div className="actions">
@@ -107,6 +114,7 @@ function ProductModal({ product, onClose, onRefresh }) {
     name: product?.name || "",
     description: product?.description || "",
     price: product?.price || "",
+    oldPrice: product?.oldPrice || "",
     category: product?.category || "",
     stock: product?.stock || "",
     status: product?.status || "Live"
@@ -164,7 +172,7 @@ function ProductModal({ product, onClose, onRefresh }) {
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label>Price (৳)</label>
+              <label>Selling Price (৳)</label>
               <input 
                 type="number" 
                 required 
@@ -173,12 +181,12 @@ function ProductModal({ product, onClose, onRefresh }) {
               />
             </div>
             <div className="form-group">
-              <label>Category</label>
+              <label>Original Price (৳)</label>
               <input 
-                type="text" 
-                required 
-                value={formData.category} 
-                onChange={e => setFormData({...formData, category: e.target.value})} 
+                type="number" 
+                value={formData.oldPrice} 
+                onChange={e => setFormData({...formData, oldPrice: e.target.value})} 
+                placeholder="Optional"
               />
             </div>
           </div>
@@ -192,6 +200,15 @@ function ProductModal({ product, onClose, onRefresh }) {
           </div>
           <div className="form-row">
             <div className="form-group">
+              <label>Category</label>
+              <input 
+                type="text" 
+                required 
+                value={formData.category} 
+                onChange={e => setFormData({...formData, category: e.target.value})} 
+              />
+            </div>
+            <div className="form-group">
               <label>Stock</label>
               <input 
                 type="number" 
@@ -200,6 +217,8 @@ function ProductModal({ product, onClose, onRefresh }) {
                 onChange={e => setFormData({...formData, stock: e.target.value})} 
               />
             </div>
+          </div>
+          <div className="form-row">
             <div className="form-group">
               <label>Status</label>
               <select 
