@@ -10,6 +10,7 @@ const HeroPage = lazy(() => import("../features/hero/pages/HeroPage"));
 const ReviewsPage = lazy(() => import("../features/reviews/pages/ReviewsPage"));
 const CouponsPage = lazy(() => import("../features/coupons/pages/CouponsPage"));
 const MessagesPage = lazy(() => import("../features/contact/pages/MessagesPage"));
+const CustomersPage = lazy(() => import("../features/customers/pages/CustomersPage"));
 
 export function AppRouter() {
   return (
@@ -22,16 +23,7 @@ export function AppRouter() {
       <Route path="/reviews" element={<ReviewsPage />} />
       <Route path="/coupons" element={<CouponsPage />} />
       <Route path="/messages" element={<MessagesPage />} />
-      <Route 
-        path="/customers" 
-        element={
-          <FeaturePlaceholder 
-            title="Customers" 
-            description="View and manage customer profiles." 
-            icon={Users} 
-          />
-        } 
-      />
+      <Route path="/customers" element={<CustomersPage />} />
       <Route 
         path="/settings" 
         element={
