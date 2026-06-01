@@ -8,6 +8,7 @@ import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
 export default function HeroPage() {
   const [slides, setSlides] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
