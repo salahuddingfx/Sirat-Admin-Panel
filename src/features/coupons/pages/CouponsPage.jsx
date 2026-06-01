@@ -1,0 +1,157 @@
+import { useState, useEffect } from "react";
+import { Plus, Edit2, Trash2, Tag } from "lucide-react";
+import { fetchAllCoupons, deleteCoupon, createCoupon, updateCoupon } from "../../../lib/api/queries";
+import { Button, Input, Card, SectionHeader } from "../../../components/ui";
+
+export default function CouponsPage() {
+  const [coupons, setCoupons] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentCoupon, setCurrentCoupon] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const loadCoupons = async () => {
+    try {
+      const res = await fetchAllCoupons();
+      if (res.success) setCoupons(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCoupons();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this coupon?")) return;
+    try {
+      await deleteCoupon(id);
+      setCoupons(coupons.filter((c) => c._id !== id));
+    } catch (err) {
+      alert("Failed to delete coupon");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+    data.isActive = formData.get("isActive") === "on";
+    data.discountValue = parseFloat(data.discountValue);
+    data.minPurchase = parseFloat(data.minPurchase) || 0;
+
+    setIsSubmitting(true);
+    try {
+      if (currentCoupon) {
+        await updateCoupon(currentCoupon._id, data);
+      } else {
+        await createCoupon(data);
+      }
+      setIsModalOpen(false);
+      loadCoupons();
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to save coupon");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="admin-page">
+      <SectionHeader
+        title="Discount Coupons"
+        description="Create and manage promotional discount codes."
+        actions={
+          <Button onClick={() => { setCurrentCoupon(null); setIsModalOpen(true); }}>
+            <Plus size={18} /> Generate Coupon
+          </Button>
+        }
+      />
+
+      <div className="grid-container" style={{ marginTop: "2rem" }}>
+        {loading ? (
+          <p>Loading coupons...</p>
+        ) : coupons.length === 0 ? (
+          <p>No coupons found.</p>
+        ) : (
+          <div className="products-list">
+            {coupons.map((coupon) => (
+              <Card key={coupon._id} className="product-card">
+                <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
+                  <div className="product-image-preview" style={{ width: "60px", height: "60px", background: "var(--sirat-bg-alt)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--sirat-gold)" }}>
+                    <Tag size={24} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <h4 style={{ margin: 0, fontSize: "1.25rem", color: "var(--sirat-gold-soft)" }}>{coupon.code}</h4>
+                        <span className={`badge ${coupon.isActive ? "badge-success" : "badge-outline"}`}>
+                            {coupon.isActive ? "Active" : "Disabled"}
+                        </span>
+                    </div>
+                    <div style={{ display: "flex", gap: "1.5rem", marginTop: "0.5rem", fontSize: "0.875rem" }}>
+                        <span>Type: <strong>{coupon.discountType === "percentage" ? "Percentage (%)" : "Fixed Amount"}</strong></span>
+                        <span>Value: <strong>{coupon.discountValue}{coupon.discountType === "percentage" ? "%" : " BDT"}</strong></span>
+                        <span>Min. Purchase: <strong>{coupon.minPurchase} BDT</strong></span>
+                    </div>
+                    {coupon.expiryDate && (
+                        <p className="muted" style={{ fontSize: "0.75rem", marginTop: "0.5rem" }}>
+                            Expires on: {new Date(coupon.expiryDate).toLocaleDateString()}
+                        </p>
+                    )}
+                    <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
+                      <Button variant="outline" size="sm" onClick={() => { setCurrentCoupon(coupon); setIsModalOpen(true); }}>
+                        <Edit2 size={14} /> Edit
+                      </Button>
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(coupon._id)} style={{ color: "var(--sirat-error)" }}>
+                        <Trash2 size={14} /> Delete
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>{currentCoupon ? "Edit Coupon" : "Create New Coupon"}</h3>
+            <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
+              <Input label="Coupon Code" name="code" defaultValue={currentCoupon?.code} placeholder="e.g. SIRAT20" required style={{ textTransform: "uppercase" }} />
+              
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <div className="form-group">
+                    <label style={{ fontSize: "0.85rem", fontWeight: "700", marginBottom: "0.5rem", display: "block" }}>Discount Type</label>
+                    <select name="discountType" defaultValue={currentCoupon?.discountType || "percentage"} className="sirat-input" style={{ width: "100%", padding: "0.625rem", borderRadius: "8px", border: "1px solid var(--sirat-border)", background: "var(--sirat-bg-alt)" }}>
+                        <option value="percentage">Percentage (%)</option>
+                        <option value="fixed">Fixed Amount (BDT)</option>
+                    </select>
+                </div>
+                <Input label="Discount Value" name="discountValue" type="number" step="0.01" defaultValue={currentCoupon?.discountValue} required />
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                <Input label="Min. Purchase Amount" name="minPurchase" type="number" defaultValue={currentCoupon?.minPurchase || 0} />
+                <Input label="Expiry Date" name="expiryDate" type="date" defaultValue={currentCoupon?.expiryDate ? new Date(currentCoupon.expiryDate).toISOString().split('T')[0] : ""} />
+              </div>
+
+              <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem" }}>
+                <input type="checkbox" name="isActive" defaultChecked={currentCoupon ? currentCoupon.isActive : true} /> Active
+              </label>
+
+              <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1rem" }}>
+                <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Save Coupon"}</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
