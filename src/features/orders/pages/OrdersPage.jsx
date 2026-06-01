@@ -68,66 +68,74 @@ export function OrdersPage() {
       />
 
       <Card className="orders-card">
-        <table className="orders-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Customer</th>
-              <th>Date</th>
-              <th>Total</th>
-              <th>Payment</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders?.map((order) => (
-              <tr key={order._id}>
-                <td><strong>{order.orderId}</strong></td>
-                <td>
-                  <div className="customer-cell">
-                    <span>{order.user?.name || order.guestInfo?.name}</span>
-                    <small>{order.user?.email || order.guestInfo?.email}</small>
-                  </div>
-                </td>
-                <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                <td>৳{order.totalAmount}</td>
-                <td>
-                  <Badge variant="primary">{order.paymentMethod.toUpperCase()}</Badge>
-                </td>
-                <td>
-                  <select
-                    value={order.status}
-                    onChange={(e) => handleStatusChange(order._id, e.target.value)}
-                    className="status-select"
-                    disabled={isProcessing}
-                  >
-                    <option value="received">Received</option>
-                    <option value="confirmed">Confirmed</option>
-                    <option value="packed">Packed</option>
-                    <option value="shipped">Shipped</option>
-                    <option value="delivered">Delivered</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </td>
-                <td>
-                  <div className="action-buttons">
-                    <Button
-                      variant="ghost"
-                      onClick={() => {
-                        setSelectedOrder(order);
-                        setTimeout(handlePrint, 100);
-                      }}
-                      title="Print Invoice"
-                    >
-                      <Printer size={16} />
-                    </Button>
-                  </div>
-                </td>
+        {orders?.length === 0 ? (
+          <div style={{ padding: "3rem", textAlign: "center" }}>
+            <ShoppingBag size={48} className="muted" style={{ margin: "0 auto 1rem" }} />
+            <h3>No orders found</h3>
+            <p className="muted">Your order ledger is currently empty.</p>
+          </div>
+        ) : (
+          <table className="orders-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Customer</th>
+                <th>Date</th>
+                <th>Total</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {orders?.map((order) => (
+                <tr key={order._id}>
+                  <td><strong>{order.orderId}</strong></td>
+                  <td>
+                    <div className="customer-cell">
+                      <span>{order.user?.name || order.guestInfo?.name}</span>
+                      <small>{order.user?.email || order.guestInfo?.email}</small>
+                    </div>
+                  </td>
+                  <td>{new Date(order.createdAt).toLocaleDateString()}</td>
+                  <td>৳{order.totalAmount}</td>
+                  <td>
+                    <Badge variant="primary">{order.paymentMethod.toUpperCase()}</Badge>
+                  </td>
+                  <td>
+                    <select
+                      value={order.status}
+                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                      className="status-select"
+                      disabled={isProcessing}
+                    >
+                      <option value="received">Received</option>
+                      <option value="confirmed">Confirmed</option>
+                      <option value="packed">Packed</option>
+                      <option value="shipped">Shipped</option>
+                      <option value="delivered">Delivered</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          setSelectedOrder(order);
+                          setTimeout(handlePrint, 100);
+                        }}
+                        title="Print Invoice"
+                      >
+                        <Printer size={16} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </Card>
 
       {/* Hidden Invoice Component for Printing */}
