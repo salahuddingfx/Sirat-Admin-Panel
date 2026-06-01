@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { ArrowRight, BarChart3, Boxes, ShoppingBag } from "lucide-react";
 import { Button, MetricCard, Card, SectionHeader, Badge } from "../../../components/ui";
 import { fetchStats } from "../../../lib/api/queries";
 import "./DashboardPage.css";
 
 export function DashboardPage() {
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     revenue: 0,
     orderCount: 0,
