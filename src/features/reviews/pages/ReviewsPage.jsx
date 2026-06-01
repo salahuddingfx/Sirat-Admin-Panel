@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Check, X, Trash2, Star } from "lucide-react";
 import { fetchAllReviews, updateReviewApproval, deleteReview } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader } from "../../../components/ui";
+import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export default function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
@@ -26,19 +28,22 @@ export default function ReviewsPage() {
     try {
       await updateReviewApproval(id, !currentStatus);
       setReviews(reviews.map((r) => r._id === id ? { ...r, isApproved: !currentStatus } : r));
+      triggerAdminToast(currentStatus ? "Review rejected" : "Review approved", "success");
     } catch (err) {
-      alert("Failed to update status");
+      triggerAdminToast("Failed to update status", "error");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this review?")) return;
-    try {
-      await deleteReview(id);
-      setReviews(reviews.filter((r) => r._id !== id));
-    } catch (err) {
-      alert("Failed to delete review");
-    }
+    triggerAdminConfirm("Delete this review?", async () => {
+      try {
+        await deleteReview(id);
+        setReviews(reviews.filter((r) => r._id !== id));
+        triggerAdminToast("Review deleted", "success");
+      } catch (err) {
+        triggerAdminToast("Failed to delete review", "error");
+      }
+    });
   };
 
   return (
