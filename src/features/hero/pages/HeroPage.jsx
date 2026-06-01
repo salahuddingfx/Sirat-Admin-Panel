@@ -31,8 +31,9 @@ export default function HeroPage() {
     try {
       await deleteHeroSlide(id);
       setSlides(slides.filter((s) => s._id !== id));
+      triggerAdminToast("Slide deleted successfully", "success");
     } catch (err) {
-      alert("Failed to delete slide");
+      triggerAdminToast("Failed to delete slide", "error");
     }
   };
 
@@ -47,13 +48,15 @@ export default function HeroPage() {
     try {
       if (currentSlide) {
         await updateHeroSlide(currentSlide._id, data);
+        triggerAdminToast("Slide updated", "success");
       } else {
         await createHeroSlide(data);
+        triggerAdminToast("Slide created", "success");
       }
       setIsModalOpen(false);
       loadSlides();
     } catch (err) {
-      alert("Failed to save slide");
+      triggerAdminToast("Failed to save slide", "error");
     } finally {
       setIsSubmitting(false);
     }
