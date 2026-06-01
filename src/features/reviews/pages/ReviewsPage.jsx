@@ -9,19 +9,24 @@ export default function ReviewsPage() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const loadReviews = async () => {
+  const loadReviews = async (signal) => {
     try {
-      const res = await fetchAllReviews();
+      const res = await fetchAllReviews({ signal });
       if (res.success) setReviews(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error(err);
+        triggerAdminToast("Failed to load reviews", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadReviews();
+    const controller = new AbortController();
+    loadReviews(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleToggleApproval = async (id, currentStatus) => {
