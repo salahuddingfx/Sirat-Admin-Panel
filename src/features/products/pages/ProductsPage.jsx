@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
 import { fetchProducts, deleteProduct, createProduct, updateProduct } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import "./ProductsPage.css";
 
 export function ProductsPage() {
