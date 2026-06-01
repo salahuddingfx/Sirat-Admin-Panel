@@ -61,3 +61,9 @@ export const settingsSchema = z.object({
   tiktok: z.string().optional().nullable().or(z.literal("")),
   twitter: z.string().optional().nullable().or(z.literal(""))
 });
+
+export const categorySchema = z.object({
+  id: idSchema,
+  name: z.string().min(1),
+  image: z.string().url()
+});
