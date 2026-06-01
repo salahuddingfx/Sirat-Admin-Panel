@@ -9,30 +9,36 @@ import "./CategoriesPage.css";
 export function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
 
-  const loadCategories = async () => {
+  const loadCategories = async (signal) => {
     try {
-      const response = await fetchCategories();
+      const response = await fetchCategories({ signal });
       if (response.success) {
         setCategories(response.data);
       }
     } catch (err) {
-      console.error("Failed to load categories:", err);
-      triggerAdminToast("Failed to load categories", "error");
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error("Failed to load categories:", err);
+        triggerAdminToast("Failed to load categories", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadCategories();
+    const controller = new AbortController();
+    loadCategories(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleDelete = async (id) => {
     triggerAdminConfirm("Are you sure you want to delete this category? Products in this category will not be deleted, but they won't show in filtering.", async () => {
       try {
+        setIsProcessing(true);
         const response = await deleteCategory(id);
         if (response.success) {
           loadCategories();
@@ -41,6 +47,8 @@ export function CategoriesPage() {
       } catch (err) {
         console.error("Failed to delete category:", err);
         triggerAdminToast("Failed to delete category", "error");
+      } finally {
+        setIsProcessing(false);
       }
     });
   };
@@ -75,7 +83,7 @@ export function CategoriesPage() {
                 <Button variant="ghost" onClick={() => { setEditingCategory(cat); setShowModal(true); }}>
                   <Edit2 size={16} />
                 </Button>
-                <Button variant="ghost" className="delete-btn" onClick={() => handleDelete(cat._id)}>
+                <Button variant="ghost" className="delete-btn" onClick={() => handleDelete(cat._id)} disabled={isProcessing}>
                   <Trash2 size={16} />
                 </Button>
               </div>
