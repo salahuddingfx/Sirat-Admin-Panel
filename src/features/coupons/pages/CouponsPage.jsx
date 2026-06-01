@@ -46,6 +46,11 @@ export default function CouponsPage() {
     data.isActive = formData.get("isActive") === "on";
     data.discountValue = parseFloat(data.discountValue);
     data.minPurchase = parseFloat(data.minPurchase) || 0;
+    
+    // Remove empty strings for Date fields to avoid Mongoose cast errors
+    if (!data.expiryDate) {
+        delete data.expiryDate;
+    }
 
     setIsSubmitting(true);
     try {
