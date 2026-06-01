@@ -9,19 +9,24 @@ export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const loadMessages = async () => {
+  const loadMessages = async (signal) => {
     try {
-      const res = await fetchAllContacts();
+      const res = await fetchAllContacts({ signal });
       if (res.success) setMessages(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error(err);
+        triggerAdminToast("Failed to load messages", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadMessages();
+    const controller = new AbortController();
+    loadMessages(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleMarkAsRead = async (id) => {
