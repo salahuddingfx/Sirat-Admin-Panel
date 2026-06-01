@@ -76,12 +76,12 @@ export function ProductsPage() {
               <p className="category">{product?.category}</p>
               <div className="price-row">
                 <span className="price-container">
-                  {product.oldPrice && product.oldPrice > product.price && (
+                  {product?.oldPrice && product?.oldPrice > product?.price && (
                     <span className="original-price" style={{ textDecoration: "line-through", color: "var(--color-text-muted)", marginRight: "8px", fontSize: "0.85em" }}>
-                      ৳{product.oldPrice}
+                      ৳{product?.oldPrice}
                     </span>
                   )}
-                  <span className="price">৳{product.price}</span>
+                  <span className="price">৳{product?.price}</span>
                 </span>
                 <span className="stock">{product.stock} in stock</span>
               </div>
