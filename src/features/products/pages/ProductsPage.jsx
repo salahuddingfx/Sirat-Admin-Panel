@@ -83,7 +83,7 @@ export function ProductsPage() {
                   )}
                   <span className="price">৳{product?.price}</span>
                 </span>
-                <span className="stock">{product.stock} in stock</span>
+                <span className="stock">{product?.stock} in stock</span>
               </div>
               <div className="actions">
                 <Button variant="ghost" onClick={() => { setEditingProduct(product); setShowModal(true); }}>
