@@ -76,6 +76,7 @@ export function App() {
           <AppRouter />
         </AppShell>
         <AdminToast />
+        <AdminConfirm />
     </>
   );
 }
