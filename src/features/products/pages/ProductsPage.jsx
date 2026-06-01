@@ -111,7 +111,7 @@ export function ProductsPage() {
               </div>
             </div>
           </Card>
-        ))}
+        )))}
       </div>
 
       {showModal && (
