@@ -108,9 +108,9 @@ export function DashboardPage() {
 
       {/* Sales Overview Graph */}
       {orders.length > 0 && (
-        <Card className="dashboard-panel" style={{ padding: "1.5rem", marginBottom: "2rem" }}>
-          <h3 style={{ margin: "0 0 1rem", fontSize: "1rem" }}>Weekly Sales Revenue (Net)</h3>
-          <div style={{ width: "100%", height: 220 }}>
+        <Card className="dashboard-panel" style={PANEL_STYLE}>
+          <h3 style={PANEL_TITLE_STYLE}>Weekly Sales Revenue (Net)</h3>
+          <div style={CHART_CONTAINER_STYLE}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 5, right: 10, left: -20, bottom: 0 }}>
                 <defs>
@@ -122,13 +122,8 @@ export function DashboardPage() {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" />
                 <XAxis dataKey="date" stroke="var(--color-text-muted)" fontSize={11} tickLine={false} />
                 <YAxis stroke="var(--color-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                <Tooltip 
-                  contentStyle={{ 
-                    backgroundColor: "var(--color-surface)", 
-                    borderColor: "var(--color-border)",
-                    borderRadius: "6px",
-                    fontSize: "0.75rem"
-                  }} 
+                <Tooltip
+                  contentStyle={TOOLTIP_STYLE}
                 />
                 <Area type="monotone" name="Net Sales (৳)" dataKey="revenue" stroke="var(--color-primary)" strokeWidth={1.5} fillOpacity={1} fill="url(#dashRevenue)" />
               </AreaChart>
