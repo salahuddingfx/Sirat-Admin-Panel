@@ -4,6 +4,33 @@ import { fetchSettings, updateSettings } from "../../../lib/api/queries";
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
+const FORM_CONTAINER_STYLE = { marginTop: "2rem", display: "grid", gap: "2rem" };
+const CARD_PADDING_STYLE = { padding: "2rem" };
+const SECTION_HEADER_STYLE = { display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.5rem" };
+const SECTION_TITLE_STYLE = { margin: 0 };
+const BRANDING_GRID_STYLE = { display: "grid", gridTemplateColumns: "1fr 2fr", gap: "2rem", alignItems: "start" };
+const LOGO_BOX_STYLE = {
+  width: "100%",
+  height: "150px",
+  border: "2px dashed var(--color-border-strong)",
+  borderRadius: "12px",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  background: "var(--color-bg)",
+  cursor: "pointer",
+  overflow: "hidden",
+  position: "relative"
+};
+const LOGO_IMAGE_STYLE = { width: "100%", height: "100%", objectFit: "contain", padding: "10px" };
+const LOGO_UPLOAD_OVERLAY = { position: "absolute", bottom: "8px", right: "8px", background: "rgba(0,0,0,0.6)", padding: "4px 8px", borderRadius: "4px", display: "flex", alignItems: "center", gap: "4px", color: "#fff", fontSize: "10px" };
+const LOGO_CASH_HELP = { fontSize: "0.7rem" };
+const CONTACT_GRID_STYLE = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" };
+const PAYMENT_GRID_STYLE = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" };
+const SOCIAL_GRID_STYLE = { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" };
+const ACTION_CONTAINER_STYLE = { display: "flex", justifyContent: "flex-end" };
+
 export function SettingsPage() {
   const [settings, setSettings] = useState({
     phone: "",
