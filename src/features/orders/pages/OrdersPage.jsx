@@ -68,7 +68,7 @@ export function OrdersPage() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {orders?.map((order) => (
               <tr key={order._id}>
                 <td><strong>{order.orderId}</strong></td>
                 <td>
