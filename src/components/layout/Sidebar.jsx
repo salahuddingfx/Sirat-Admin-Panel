@@ -18,14 +18,18 @@ export function Sidebar({ brand, tagline, navItems }) {
             to={item.href}
             className={({ isActive }) => cn("nav-link", isActive && "active")}
           >
-            {item.icon && <item.icon size={20} />}
-            <span>{item.label}</span>
-            {isActive && (
-              <motion.div
-                layoutId="nav-indicator"
-                className="nav-indicator"
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              />
+            {({ isActive }) => (
+              <>
+                {item.icon && <item.icon size={20} />}
+                <span>{item.label}</span>
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-indicator"
+                    className="nav-indicator"
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </>
             )}
           </NavLink>
         ))}
