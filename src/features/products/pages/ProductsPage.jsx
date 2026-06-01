@@ -72,8 +72,8 @@ export function ProductsPage() {
               </Badge>
             </div>
             <div className="product-info">
-              <h3>{product.name}</h3>
-              <p className="category">{product.category}</p>
+              <h3>{product?.name}</h3>
+              <p className="category">{product?.category}</p>
               <div className="price-row">
                 <span className="price-container">
                   {product.oldPrice && product.oldPrice > product.price && (
