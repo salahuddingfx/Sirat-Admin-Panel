@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Mail, Check, Trash2, User } from "lucide-react";
 import { fetchAllContacts, markContactAsRead, deleteContact } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader } from "../../../components/ui";
+import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export default function MessagesPage() {
   const [messages, setMessages] = useState([]);
@@ -26,19 +28,22 @@ export default function MessagesPage() {
     try {
       await markContactAsRead(id);
       setMessages(messages.map((m) => m._id === id ? { ...m, isRead: true } : m));
+      triggerAdminToast("Marked as read", "success");
     } catch (err) {
-      alert("Failed to mark as read");
+      triggerAdminToast("Failed to mark as read", "error");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this message?")) return;
-    try {
-      await deleteContact(id);
-      setMessages(messages.filter((m) => m._id !== id));
-    } catch (err) {
-      alert("Failed to delete message");
-    }
+    triggerAdminConfirm("Delete this message?", async () => {
+      try {
+        await deleteContact(id);
+        setMessages(messages.filter((m) => m._id !== id));
+        triggerAdminToast("Message deleted", "success");
+      } catch (err) {
+        triggerAdminToast("Failed to delete message", "error");
+      }
+    });
   };
 
   return (
