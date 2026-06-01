@@ -81,21 +81,21 @@ export default function CustomersPage() {
                                         <User size={16} />
                                     </div>
                                     <div>
-                                        <strong style={{ display: "block" }}>{u.name}</strong>
-                                        <small className="muted">@{u.username || "no-username"}</small>
+                                        <strong style={{ display: "block" }}>{u?.name}</strong>
+                                        <small className="muted">@{u?.username || "no-username"}</small>
                                     </div>
                                 </div>
                             </td>
                             <td>
                                 <div style={{ display: "grid", gap: "0.25rem" }}>
-                                    <span style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.4rem" }}><Mail size={12} /> {u.email}</span>
-                                    <span style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.4rem" }}><Phone size={12} /> {u.phone || "N/A"}</span>
+                                    <span style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.4rem" }}><Mail size={12} /> {u?.email}</span>
+                                    <span style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.4rem" }}><Phone size={12} /> {u?.phone || "N/A"}</span>
                                 </div>
                             </td>
-                            <td>{new Date(u.createdAt).toLocaleDateString()}</td>
+                            <td>{u?.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</td>
                             <td>
-                                <Badge variant={u.role === 'admin' ? 'success' : 'primary'}>
-                                    {u.role.toUpperCase()}
+                                <Badge variant={u?.role === 'admin' ? 'success' : 'primary'}>
+                                    {u?.role?.toUpperCase()}
                                 </Badge>
                             </td>
                             <td>
