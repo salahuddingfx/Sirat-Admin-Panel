@@ -56,22 +56,36 @@ export function App() {
           tagline="Admin Command Center"
           navItems={navItems}
           rightSlot={
-            <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <span style={{ 
-                fontSize: '0.8125rem', 
-                fontWeight: 600, 
-                color: 'var(--color-success)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.35rem'
-              }}>
-                <MessageSquare size={14} /> Support online
-              </span>
-              <Button variant="outline" onClick={handleLogout} style={{ padding: "0.4rem 1rem", fontSize: "0.8125rem" }}>
-                Log Out
-              </Button>
-            </div>
-          }
+              <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <span style={{ 
+                  fontSize: '0.8125rem', 
+                  fontWeight: 600, 
+                  color: 'var(--color-success)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.35rem'
+                }}>
+                  <MessageSquare size={14} /> Support online
+                </span>
+
+                <div className="header__user" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <div className="header__avatar" title={user.name}>
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.name} />
+                    ) : (
+                      <span className="initials">{(user.name || 'A').split(' ').map(s => s[0]).slice(0,2).join('')}</span>
+                    )}
+                  </div>
+                  <div className="header__meta">
+                    <div className="header__name" style={{ fontWeight: 700 }}>{user.name}</div>
+                    <div className="header__role" style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{user.role}</div>
+                  </div>
+                  <Button variant="outline" onClick={handleLogout} style={{ padding: "0.4rem 1rem", fontSize: "0.8125rem" }}>
+                    Log Out
+                  </Button>
+                </div>
+              </div>
+            }
         >
           <AppRouter />
         </AppShell>
