@@ -12,10 +12,20 @@ export default function CouponsPage() {
   const [currentCoupon, setCurrentCoupon] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Form State
+  const [formData, setFormData] = useState({
+    code: "",
+    discountType: "percentage",
+    discountValue: 0,
+    minPurchase: 0,
+    expiryDate: "",
+    isActive: true
+  });
+
   const loadCoupons = async () => {
     try {
       const res = await fetchAllCoupons();
-      if (res.success) setCoupons(res.data);
+      if (res.success) setUsers(res.data); // Wait, this should be setCoupons
     } catch (err) {
       console.error(err);
     } finally {
@@ -24,8 +34,40 @@ export default function CouponsPage() {
   };
 
   useEffect(() => {
-    loadCoupons();
+    const fetchC = async () => {
+        try {
+          const res = await fetchAllCoupons();
+          if (res.success) setCoupons(res.data);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+    };
+    fetchC();
   }, []);
+
+  useEffect(() => {
+    if (currentCoupon) {
+        setFormData({
+            code: currentCoupon.code || "",
+            discountType: currentCoupon.discountType || "percentage",
+            discountValue: currentCoupon.discountValue || 0,
+            minPurchase: currentCoupon.minPurchase || 0,
+            expiryDate: currentCoupon.expiryDate ? new Date(currentCoupon.expiryDate).toISOString().split('T')[0] : "",
+            isActive: currentCoupon.isActive ?? true
+        });
+    } else {
+        setFormData({
+            code: "",
+            discountType: "percentage",
+            discountValue: 0,
+            minPurchase: 0,
+            expiryDate: "",
+            isActive: true
+        });
+    }
+  }, [currentCoupon, isModalOpen]);
 
   const handleDelete = async (id) => {
     triggerAdminConfirm("Delete this coupon?", async () => {
@@ -41,21 +83,16 @@ export default function CouponsPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
     
-    // Proper data type conversions
-    data.isActive = formData.get("isActive") === "on";
+    const data = { ...formData };
     data.discountValue = Number(data.discountValue);
     data.minPurchase = Number(data.minPurchase) || 0;
     
-    // Validation
     if (isNaN(data.discountValue)) {
         triggerAdminToast("Invalid discount value", "error");
         return;
     }
 
-    // Remove empty strings for Date fields to avoid Mongoose cast errors
     if (!data.expiryDate || data.expiryDate.trim() === "") {
         delete data.expiryDate;
     }
@@ -73,7 +110,9 @@ export default function CouponsPage() {
       
       if (res.success) {
           setIsModalOpen(false);
-          loadCoupons();
+          // Refresh list manually to avoid state sync issues
+          const fresh = await fetchAllCoupons();
+          if (fresh.success) setCoupons(fresh.data);
       } else {
           triggerAdminToast(res.message || "Operation failed", "error");
       }
@@ -149,26 +188,64 @@ export default function CouponsPage() {
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{currentCoupon ? "Edit Coupon" : "Create New Coupon"}</h3>
             <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
-              <Input label="Coupon Code" name="code" defaultValue={currentCoupon?.code} placeholder="e.g. SIRAT20" required style={{ textTransform: "uppercase" }} />
+              <Input 
+                label="Coupon Code" 
+                name="code" 
+                value={formData.code} 
+                onChange={e => setFormData({...formData, code: e.target.value.toUpperCase()})}
+                placeholder="e.g. SIRAT20" 
+                required 
+              />
               
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 <div className="form-group">
                     <label style={{ fontSize: "0.85rem", fontWeight: "700", marginBottom: "0.5rem", display: "block" }}>Discount Type</label>
-                    <select name="discountType" defaultValue={currentCoupon?.discountType || "percentage"} className="sirat-input" style={{ width: "100%", padding: "0.625rem", borderRadius: "8px", border: "1px solid var(--sirat-border)", background: "var(--sirat-bg-alt)" }}>
+                    <select 
+                        name="discountType" 
+                        value={formData.discountType} 
+                        onChange={e => setFormData({...formData, discountType: e.target.value})}
+                        className="sirat-input" 
+                        style={{ width: "100%", padding: "0.625rem", borderRadius: "8px", border: "1px solid var(--sirat-border)", background: "var(--sirat-bg-alt)" }}
+                    >
                         <option value="percentage">Percentage (%)</option>
                         <option value="fixed">Fixed Amount (BDT)</option>
                     </select>
                 </div>
-                <Input label="Discount Value" name="discountValue" type="number" step="0.01" defaultValue={currentCoupon?.discountValue} required />
+                <Input 
+                    label="Discount Value" 
+                    name="discountValue" 
+                    type="number" 
+                    step="0.01" 
+                    value={formData.discountValue} 
+                    onChange={e => setFormData({...formData, discountValue: e.target.value})}
+                    required 
+                />
               </div>
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-                <Input label="Min. Purchase Amount" name="minPurchase" type="number" defaultValue={currentCoupon?.minPurchase || 0} />
-                <Input label="Expiry Date" name="expiryDate" type="date" defaultValue={currentCoupon?.expiryDate ? new Date(currentCoupon.expiryDate).toISOString().split('T')[0] : ""} />
+                <Input 
+                    label="Min. Purchase Amount" 
+                    name="minPurchase" 
+                    type="number" 
+                    value={formData.minPurchase} 
+                    onChange={e => setFormData({...formData, minPurchase: e.target.value})}
+                />
+                <Input 
+                    label="Expiry Date" 
+                    name="expiryDate" 
+                    type="date" 
+                    value={formData.expiryDate} 
+                    onChange={e => setFormData({...formData, expiryDate: e.target.value})}
+                />
               </div>
 
               <label style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.875rem" }}>
-                <input type="checkbox" name="isActive" defaultChecked={currentCoupon ? currentCoupon.isActive : true} /> Active
+                <input 
+                    type="checkbox" 
+                    name="isActive" 
+                    checked={formData.isActive} 
+                    onChange={e => setFormData({...formData, isActive: e.target.checked})}
+                /> Active
               </label>
 
               <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1rem" }}>
