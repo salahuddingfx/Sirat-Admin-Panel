@@ -8,6 +8,7 @@ import { triggerAdminToast } from "../../../components/ui/AdminToast";
 export default function CouponsPage() {
   const [coupons, setCoupons] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCoupon, setCurrentCoupon] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,17 +26,22 @@ export default function CouponsPage() {
 
 
   useEffect(() => {
+    const controller = new AbortController();
     const fetchC = async () => {
         try {
-          const res = await fetchAllCoupons();
+          const res = await fetchAllCoupons({ signal: controller.signal });
           if (res.success) setCoupons(res.data);
         } catch (err) {
-          console.error(err);
+          if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+            console.error(err);
+            triggerAdminToast("Failed to load coupons", "error");
+          }
         } finally {
           setLoading(false);
         }
     };
     fetchC();
+    return () => controller.abort();
   }, []);
 
   useEffect(() => {
@@ -63,11 +69,14 @@ export default function CouponsPage() {
   const handleDelete = async (id) => {
     triggerAdminConfirm("Delete this coupon?", async () => {
       try {
+        setIsProcessing(true);
         await deleteCoupon(id);
         setCoupons(coupons.filter((c) => c._id !== id));
         triggerAdminToast("Coupon deleted", "success");
       } catch (err) {
         triggerAdminToast("Failed to delete coupon", "error");
+      } finally {
+        setIsProcessing(false);
       }
     });
   };
@@ -162,7 +171,7 @@ export default function CouponsPage() {
                       <Button variant="outline" size="sm" onClick={() => { setCurrentCoupon(coupon); setIsModalOpen(true); }}>
                         <Edit2 size={14} /> Edit
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleDelete(coupon._id)} style={{ color: "var(--sirat-error)" }}>
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(coupon._id)} style={{ color: "var(--sirat-error)" }} disabled={isProcessing}>
                         <Trash2 size={14} /> Delete
                       </Button>
                     </div>
