@@ -6,6 +6,10 @@ import { Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings } from
 const DashboardPage = lazy(() => import("../features/dashboard/pages/DashboardPage").then(module => ({ default: module.DashboardPage })));
 const OrdersPage = lazy(() => import("../features/orders/pages/OrdersPage").then(module => ({ default: module.OrdersPage })));
 const ProductsPage = lazy(() => import("../features/products/pages/ProductsPage").then(module => ({ default: module.ProductsPage })));
+const HeroPage = lazy(() => import("../features/hero/pages/HeroPage"));
+const ReviewsPage = lazy(() => import("../features/reviews/pages/ReviewsPage"));
+const CouponsPage = lazy(() => import("../features/coupons/pages/CouponsPage"));
+const MessagesPage = lazy(() => import("../features/contact/pages/MessagesPage"));
 
 export function AppRouter() {
   return (
@@ -14,6 +18,10 @@ export function AppRouter() {
       <Route path="/" element={<DashboardPage />} />
       <Route path="/products" element={<ProductsPage />} />
       <Route path="/orders" element={<OrdersPage />} />
+      <Route path="/hero" element={<HeroPage />} />
+      <Route path="/reviews" element={<ReviewsPage />} />
+      <Route path="/coupons" element={<CouponsPage />} />
+      <Route path="/messages" element={<MessagesPage />} />
       <Route 
         path="/customers" 
         element={
@@ -21,26 +29,6 @@ export function AppRouter() {
             title="Customers" 
             description="View and manage customer profiles." 
             icon={Users} 
-          />
-        } 
-      />
-      <Route 
-        path="/reviews" 
-        element={
-          <FeaturePlaceholder 
-            title="Reviews" 
-            description="Moderate customer feedback and ratings." 
-            icon={MessageSquare} 
-          />
-        } 
-      />
-      <Route 
-        path="/coupons" 
-        element={
-          <FeaturePlaceholder 
-            title="Coupons" 
-            description="Create and manage discount codes." 
-            icon={BadgePercent} 
           />
         } 
       />
