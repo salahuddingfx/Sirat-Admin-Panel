@@ -12,21 +12,26 @@ export function ProductsPage() {
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const loadProducts = async () => {
+  const loadProducts = async (signal) => {
     try {
-      const response = await fetchProducts();
+      const response = await fetchProducts({ signal });
       if (response.success) {
         setProducts(response.data);
       }
     } catch (err) {
-      console.error("Failed to load products:", err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error("Failed to load products:", err);
+        triggerAdminToast("Failed to load products", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadProducts();
+    const controller = new AbortController();
+    loadProducts(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleDelete = async (id) => {
