@@ -1,12 +1,14 @@
-import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent } from "lucide-react";
+import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Layout, Mail } from "lucide-react";
 
 export const navItems = [
   { label: "Dashboard", href: "/", icon: BarChart3 },
   { label: "Products", href: "/products", icon: Boxes },
   { label: "Orders", href: "/orders", icon: ShoppingBag },
-  { label: "Customers", href: "/customers", icon: Users },
+  { label: "Hero Slider", href: "/hero", icon: Layout },
   { label: "Reviews", href: "/reviews", icon: MessageSquare },
-  { label: "Coupons", href: "/coupons", icon: BadgePercent }
+  { label: "Coupons", href: "/coupons", icon: BadgePercent },
+  { label: "Messages", href: "/messages", icon: Mail },
+  { label: "Customers", href: "/customers", icon: Users }
 ];
 
 export const orders = [
