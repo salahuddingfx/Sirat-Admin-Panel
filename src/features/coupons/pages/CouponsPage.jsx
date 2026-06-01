@@ -22,16 +22,7 @@ export default function CouponsPage() {
     isActive: true
   });
 
-  const loadCoupons = async () => {
-    try {
-      const res = await fetchAllCoupons();
-      if (res.success) setUsers(res.data); // Wait, this should be setCoupons
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   useEffect(() => {
     const fetchC = async () => {
