@@ -36,11 +36,14 @@ export default function HeroPage() {
   const handleDelete = async (id) => {
     triggerAdminConfirm("Are you sure you want to delete this slide?", async () => {
         try {
+          setIsProcessing(true);
           await deleteHeroSlide(id);
           setSlides(slides.filter((s) => s._id !== id));
           triggerAdminToast("Slide deleted successfully", "success");
         } catch (err) {
           triggerAdminToast("Failed to delete slide", "error");
+        } finally {
+          setIsProcessing(false);
         }
     });
   };
@@ -111,7 +114,7 @@ export default function HeroPage() {
                       <Button variant="outline" size="sm" onClick={() => { setCurrentSlide(slide); setIsModalOpen(true); }}>
                         <Edit2 size={14} /> Edit
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleDelete(slide._id)} style={{ color: "var(--sirat-error)" }}>
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(slide._id)} style={{ color: "var(--sirat-error)" }} disabled={isProcessing}>
                         <Trash2 size={14} /> Delete
                       </Button>
                     </div>
