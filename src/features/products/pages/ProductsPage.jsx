@@ -126,8 +126,10 @@ function ProductModal({ product, onClose, onRefresh }) {
       let response;
       if (product) {
         response = await updateProduct(product._id, data);
+        if (response.success) triggerAdminToast("Product updated", "success");
       } else {
         response = await createProduct(data);
+        if (response.success) triggerAdminToast("New product created", "success");
       }
 
       if (response.success) {
@@ -136,7 +138,7 @@ function ProductModal({ product, onClose, onRefresh }) {
       }
     } catch (err) {
       console.error("Submission error:", err);
-      alert("Failed to save product.");
+      triggerAdminToast("Failed to save product", "error");
     } finally {
       setIsSubmitting(false);
     }
