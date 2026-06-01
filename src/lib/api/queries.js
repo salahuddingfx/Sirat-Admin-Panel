@@ -48,6 +48,80 @@ export const deleteProduct = async (id) => {
   return response.data;
 };
 
+// Hero Slider
+export const fetchHeroSlides = async () => {
+  const response = await api.get("/admin/hero");
+  return response.data;
+};
+
+export const createHeroSlide = async (slideData) => {
+  const response = await api.post("/admin/hero", slideData);
+  return response.data;
+};
+
+export const updateHeroSlide = async (id, slideData) => {
+  const response = await api.put(`/admin/hero/${id}`, slideData);
+  return response.data;
+};
+
+export const deleteHeroSlide = async (id) => {
+  const response = await api.delete(`/admin/hero/${id}`);
+  return response.data;
+};
+
+// Reviews
+export const fetchAllReviews = async () => {
+  const response = await api.get("/admin/reviews");
+  return response.data;
+};
+
+export const updateReviewApproval = async (id, isApproved) => {
+  const response = await api.patch(`/admin/reviews/${id}/approve`, { isApproved });
+  return response.data;
+};
+
+export const deleteReview = async (id) => {
+  const response = await api.delete(`/admin/reviews/${id}`);
+  return response.data;
+};
+
+// Contacts
+export const fetchAllContacts = async () => {
+  const response = await api.get("/admin/contacts");
+  return response.data;
+};
+
+export const markContactAsRead = async (id) => {
+  const response = await api.patch(`/admin/contacts/${id}/read`);
+  return response.data;
+};
+
+export const deleteContact = async (id) => {
+  const response = await api.delete(`/admin/contacts/${id}`);
+  return response.data;
+};
+
+// Coupons
+export const fetchAllCoupons = async () => {
+  const response = await api.get("/admin/coupons");
+  return response.data;
+};
+
+export const createCoupon = async (couponData) => {
+  const response = await api.post("/admin/coupons", couponData);
+  return response.data;
+};
+
+export const updateCoupon = async (id, couponData) => {
+  const response = await api.put(`/admin/coupons/${id}`, couponData);
+  return response.data;
+};
+
+export const deleteCoupon = async (id) => {
+  const response = await api.delete(`/admin/coupons/${id}`);
+  return response.data;
+};
+
 // Auth
 export const login = async (credentials) => {
   const response = await api.post("/auth/login", credentials);
