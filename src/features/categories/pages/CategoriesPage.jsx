@@ -98,6 +98,7 @@ export function CategoriesPage() {
 function CategoryModal({ category, onClose, onRefresh }) {
   const [name, setName] = useState(category?.name || "");
   const [image, setImage] = useState(null);
+  const [featured, setFeatured] = useState(category?.featured || false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -106,6 +107,7 @@ function CategoryModal({ category, onClose, onRefresh }) {
 
     const formData = new FormData();
     formData.append("name", name);
+    formData.append("featured", String(featured));
     if (image) {
       formData.append("image", image);
     } else if (!category) {
@@ -156,6 +158,14 @@ function CategoryModal({ category, onClose, onRefresh }) {
               type="file" 
               onChange={e => setImage(e.target.files[0])} 
               required={!category}
+            />
+          </div>
+          <div className="form-group form-inline">
+            <label>Featured</label>
+            <input
+              type="checkbox"
+              checked={featured}
+              onChange={e => setFeatured(e.target.checked)}
             />
           </div>
           <div className="modal-actions">

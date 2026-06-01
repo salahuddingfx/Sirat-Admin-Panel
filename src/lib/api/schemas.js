@@ -65,5 +65,6 @@ export const settingsSchema = z.object({
 export const categorySchema = z.object({
   id: idSchema,
   name: z.string().min(1),
-  image: z.string().url()
+  image: z.string().url(),
+  featured: z.boolean().default(false)
 });

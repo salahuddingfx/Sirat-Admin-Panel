@@ -118,6 +118,7 @@ function ProductModal({ product, onClose, onRefresh }) {
     costPrice: product?.costPrice || "",
     category: product?.category || "",
     stock: product?.stock || "",
+    featured: product?.featured || false,
     status: product?.status || "Live"
   });
   const [images, setImages] = useState([]);
@@ -147,6 +148,10 @@ function ProductModal({ product, onClose, onRefresh }) {
 
     const data = new FormData();
     Object.keys(formData).forEach(key => data.append(key, formData[key]));
+    // Ensure featured is sent as string for FormData
+    if (typeof formData.featured !== 'undefined') {
+      data.set('featured', String(formData.featured));
+    }
     if (images.length > 0) {
       for (let i = 0; i < images.length; i++) {
         data.append("images", images[i]);
@@ -260,6 +265,14 @@ function ProductModal({ product, onClose, onRefresh }) {
                 <option value="Alert">Alert</option>
                 <option value="Draft">Draft</option>
               </select>
+            </div>
+            <div className="form-group form-inline">
+              <label>Featured</label>
+              <input
+                type="checkbox"
+                checked={formData.featured}
+                onChange={e => setFormData({...formData, featured: e.target.checked})}
+              />
             </div>
           </div>
           <div className="form-group">
