@@ -1,0 +1,73 @@
+.categories-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.admin-category-card {
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.admin-category-card .category-image {
+  height: 180px;
+  width: 100%;
+  position: relative;
+  background: var(--color-bg-alt);
+}
+
+.admin-category-card .category-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.admin-category-card .category-image .image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--color-text-muted);
+}
+
+.admin-category-card .category-info {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-category-card .category-info h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--color-text);
+  font-weight: 700;
+}
+
+.admin-category-card .category-info .actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.admin-category-card .category-info .actions button {
+  padding: 0.5rem;
+}
+
+.admin-category-card .category-info .actions .delete-btn {
+  color: #ff4d4f;
+}
+
+.admin-category-card .category-info .actions .delete-btn:hover {
+  background: rgba(255, 77, 79, 0.1);
+}
