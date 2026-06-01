@@ -12,19 +12,24 @@ export default function HeroPage() {
   const [currentSlide, setCurrentSlide] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const loadSlides = async () => {
+  const loadSlides = async (signal) => {
     try {
-      const res = await fetchHeroSlides();
+      const res = await fetchHeroSlides({ signal });
       if (res.success) setSlides(res.data);
     } catch (err) {
-      console.error(err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error(err);
+        triggerAdminToast("Failed to load hero slides", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadSlides();
+    const controller = new AbortController();
+    loadSlides(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleDelete = async (id) => {
