@@ -68,7 +68,14 @@ export function ProductsPage() {
       </SectionHeader>
 
       <div className="products-grid">
-        {products?.map((product) => (
+        {products?.length === 0 ? (
+          <Card className="empty-state-card" style={{ gridColumn: "1 / -1", padding: "3rem", textAlign: "center" }}>
+            <ImageIcon size={48} className="muted" style={{ margin: "0 auto 1rem" }} />
+            <h3>No products found</h3>
+            <p className="muted">Start by adding your first drop to the catalog.</p>
+          </Card>
+        ) : (
+          products?.map((product) => (
           <Card key={product._id} className="admin-product-card">
             <div className="product-image">
               {product.images?.[0] ? (
