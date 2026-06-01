@@ -6,6 +6,16 @@ import { Button, MetricCard, Card, SectionHeader, Badge } from "../../../compone
 import { fetchStats, fetchOrders } from "../../../lib/api/queries";
 import "./DashboardPage.css";
 
+const PANEL_STYLE = { padding: "1.5rem", marginBottom: "2rem" };
+const PANEL_TITLE_STYLE = { margin: "0 0 1rem", fontSize: "1rem" };
+const CHART_CONTAINER_STYLE = { width: "100%", height: 220 };
+const TOOLTIP_STYLE = {
+  backgroundColor: "var(--color-surface)",
+  borderColor: "var(--color-border)",
+  borderRadius: "6px",
+  fontSize: "0.75rem"
+};
+
 export function DashboardPage() {
   const navigate = useNavigate();
   const [stats, setStats] = useState({
