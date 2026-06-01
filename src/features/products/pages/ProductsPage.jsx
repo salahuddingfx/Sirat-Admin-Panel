@@ -98,7 +98,7 @@ export function ProductsPage() {
                 <Button variant="ghost" onClick={() => { setEditingProduct(product); setShowModal(true); }}>
                   <Edit2 size={16} />
                 </Button>
-                <Button variant="ghost" className="delete-btn" onClick={() => handleDelete(product._id)}>
+                <Button variant="ghost" className="delete-btn" onClick={() => handleDelete(product._id)} disabled={isProcessing}>
                   <Trash2 size={16} />
                 </Button>
               </div>
