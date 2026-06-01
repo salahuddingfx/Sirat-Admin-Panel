@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Tag } from "lucide-react";
 import { fetchAllCoupons, deleteCoupon, createCoupon, updateCoupon } from "../../../lib/api/queries";
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
+import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export default function CouponsPage() {
   const [coupons, setCoupons] = useState([]);
@@ -26,13 +28,15 @@ export default function CouponsPage() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this coupon?")) return;
-    try {
-      await deleteCoupon(id);
-      setCoupons(coupons.filter((c) => c._id !== id));
-    } catch (err) {
-      alert("Failed to delete coupon");
-    }
+    triggerAdminConfirm("Delete this coupon?", async () => {
+      try {
+        await deleteCoupon(id);
+        setCoupons(coupons.filter((c) => c._id !== id));
+        triggerAdminToast("Coupon deleted", "success");
+      } catch (err) {
+        triggerAdminToast("Failed to delete coupon", "error");
+      }
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -47,13 +51,15 @@ export default function CouponsPage() {
     try {
       if (currentCoupon) {
         await updateCoupon(currentCoupon._id, data);
+        triggerAdminToast("Coupon updated", "success");
       } else {
         await createCoupon(data);
+        triggerAdminToast("Coupon created", "success");
       }
       setIsModalOpen(false);
       loadCoupons();
     } catch (err) {
-      alert(err.response?.data?.message || "Failed to save coupon");
+      triggerAdminToast(err.response?.data?.message || "Failed to save coupon", "error");
     } finally {
       setIsSubmitting(false);
     }
