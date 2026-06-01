@@ -9,6 +9,16 @@
   flex-direction: column;
   padding: 2rem 1.5rem;
   z-index: 50;
+  overflow-y: auto; /* Added for scrollability */
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(197, 160, 89, 0.2);
+  border-radius: 10px;
 }
 
 .sidebar__brand {
