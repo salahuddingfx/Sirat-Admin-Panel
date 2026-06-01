@@ -76,7 +76,7 @@ export function ProductsPage() {
           </Card>
         ) : (
           products?.map((product) => (
-          <Card key={product._id} className="admin-product-card">
+            <Card key={product._id} className="admin-product-card">
             <div className="product-image">
               {product.images?.[0] ? (
                 <img src={product.images[0]} alt={product?.name || 'Product'} />
