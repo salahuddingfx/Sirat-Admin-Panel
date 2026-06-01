@@ -7,14 +7,14 @@ const getToken = () => localStorage.getItem("sirat_admin_token");
 export const api = createApiClient(baseURL, getToken);
 
 // Dashboard
-export const fetchStats = async () => {
-  const response = await api.get("/admin/stats");
+export const fetchStats = async (options = {}) => {
+  const response = await api.get("/admin/stats", options);
   return response.data;
 };
 
 // Orders
-export const fetchOrders = async () => {
-  const response = await api.get("/admin/orders");
+export const fetchOrders = async (options = {}) => {
+  const response = await api.get("/admin/orders", options);
   return response.data;
 };
 
@@ -24,8 +24,8 @@ export const updateOrderStatus = async (id, status) => {
 };
 
 // Products
-export const fetchProducts = async () => {
-  const response = await api.get("/products");
+export const fetchProducts = async (options = {}) => {
+  const response = await api.get("/products", options);
   return response.data;
 };
 
@@ -49,8 +49,8 @@ export const deleteProduct = async (id) => {
 };
 
 // Hero Slider
-export const fetchHeroSlides = async () => {
-  const response = await api.get("/admin/hero");
+export const fetchHeroSlides = async (options = {}) => {
+  const response = await api.get("/admin/hero", options);
   return response.data;
 };
 
@@ -70,8 +70,8 @@ export const deleteHeroSlide = async (id) => {
 };
 
 // Reviews
-export const fetchAllReviews = async () => {
-  const response = await api.get("/admin/reviews");
+export const fetchAllReviews = async (options = {}) => {
+  const response = await api.get("/admin/reviews", options);
   return response.data;
 };
 
@@ -86,8 +86,8 @@ export const deleteReview = async (id) => {
 };
 
 // Contacts
-export const fetchAllContacts = async () => {
-  const response = await api.get("/admin/contacts");
+export const fetchAllContacts = async (options = {}) => {
+  const response = await api.get("/admin/contacts", options);
   return response.data;
 };
 
@@ -102,8 +102,8 @@ export const deleteContact = async (id) => {
 };
 
 // Coupons
-export const fetchAllCoupons = async () => {
-  const response = await api.get("/admin/coupons");
+export const fetchAllCoupons = async (options = {}) => {
+  const response = await api.get("/admin/coupons", options);
   return response.data;
 };
 
@@ -161,8 +161,8 @@ export const updateSettings = async (settingsData) => {
 };
 
 // Categories
-export const fetchCategories = async () => {
-  const response = await api.get("/categories");
+export const fetchCategories = async (options = {}) => {
+  const response = await api.get("/categories", options);
   return response.data;
 };
 
