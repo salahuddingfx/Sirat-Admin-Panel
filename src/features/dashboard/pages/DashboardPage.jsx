@@ -10,7 +10,8 @@ export function DashboardPage() {
     orderCount: 0,
     userCount: 0,
     lowStockCount: 0,
-    recentOrders: []
+    recentOrders: [],
+    recentProducts: []
   });
   const [loading, setLoading] = useState(true);
 
@@ -39,7 +40,7 @@ export function DashboardPage() {
         title="Command Center"
         description="Monitor sales, manage inventory, and track fulfillment status in real-time."
       >
-        <Button className="header-action">
+        <Button className="header-action" onClick={() => navigate("/products")}>
           <ArrowRight size={18} /> Add product
         </Button>
       </SectionHeader>
@@ -85,7 +86,7 @@ export function DashboardPage() {
               </div>
             ))}
           </div>
-          <Button variant="ghost" className="panel-footer">
+          <Button variant="ghost" className="panel-footer" onClick={() => navigate("/orders")}>
             View all orders
           </Button>
         </Card>
@@ -98,19 +99,19 @@ export function DashboardPage() {
             className="panel-header"
           />
           <div className="activity-list">
-            {products.map((product) => (
-              <div key={product.name} className="activity-item">
+            {stats.recentProducts.map((product) => (
+              <div key={product._id} className="activity-item">
                 <div className="item-info">
                   <span className="item-id">{product.name}</span>
-                  <span className="item-meta">{product.stock}</span>
+                  <span className="item-meta">{product.stock} units</span>
                 </div>
-                <Badge variant={product.status === 'Live' ? 'success' : 'error'}>
+                <Badge variant={product.status === 'Live' ? 'success' : 'warning'}>
                   {product.status}
                 </Badge>
               </div>
             ))}
           </div>
-          <Button variant="ghost" className="panel-footer">
+          <Button variant="ghost" className="panel-footer" onClick={() => navigate("/products")}>
             Manage inventory
           </Button>
         </Card>
