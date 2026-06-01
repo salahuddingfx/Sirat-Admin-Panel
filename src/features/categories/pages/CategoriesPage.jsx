@@ -162,11 +162,16 @@ function CategoryModal({ category, onClose, onRefresh }) {
           </div>
           <div className="form-group form-inline">
             <label>Featured</label>
-            <input
-              type="checkbox"
-              checked={featured}
-              onChange={e => setFeatured(e.target.checked)}
-            />
+            <label className="toggle-switch" aria-label="Featured toggle">
+              <input
+                type="checkbox"
+                checked={featured}
+                onChange={e => setFeatured(e.target.checked)}
+              />
+              <span className="toggle-track">
+                <span className="toggle-knob" />
+              </span>
+            </label>
           </div>
           <div className="modal-actions">
             <Button variant="ghost" type="button" onClick={onClose}>Cancel</Button>

@@ -268,11 +268,16 @@ function ProductModal({ product, onClose, onRefresh }) {
             </div>
             <div className="form-group form-inline">
               <label>Featured</label>
-              <input
-                type="checkbox"
-                checked={formData.featured}
-                onChange={e => setFormData({...formData, featured: e.target.checked})}
-              />
+              <label className="toggle-switch" aria-label="Featured toggle">
+                <input
+                  type="checkbox"
+                  checked={!!formData.featured}
+                  onChange={e => setFormData({...formData, featured: e.target.checked})}
+                />
+                <span className="toggle-track">
+                  <span className="toggle-knob" />
+                </span>
+              </label>
             </div>
           </div>
           <div className="form-group">
