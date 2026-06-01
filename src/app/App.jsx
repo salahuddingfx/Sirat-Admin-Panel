@@ -7,6 +7,7 @@ import { Button } from "../components/ui";
 import { MessageSquare } from "lucide-react";
 import { login } from "../lib/api/queries";
 import AdminToast, { triggerAdminToast } from "../components/ui/AdminToast";
+import AdminConfirm from "../components/ui/AdminConfirm";
 
 export function App() {
   const [user, setUser] = useState(() => {
