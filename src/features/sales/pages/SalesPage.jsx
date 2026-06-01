@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from "recharts";
 import { DollarSign, ShoppingBag, BarChart3, Activity, CreditCard, Download, Printer, Calendar, RefreshCw } from "lucide-react";
 import { fetchOrders } from "../../../lib/api/queries";
-import { Card, SectionHeader, MetricCard } from "../../../components/ui";
+import { Card, SectionHeader, MetricCard, Button } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export function SalesPage() {
