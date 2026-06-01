@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
 import { fetchHeroSlides, deleteHeroSlide, createHeroSlide, updateHeroSlide } from "../../../lib/api/queries";
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export default function HeroPage() {
   const [slides, setSlides] = useState([]);
