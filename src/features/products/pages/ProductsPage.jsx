@@ -34,9 +34,11 @@ export function ProductsPage() {
         const response = await deleteProduct(id);
         if (response.success) {
           loadProducts();
+          triggerAdminToast("Product deleted successfully", "success");
         }
       } catch (err) {
         console.error("Failed to delete product:", err);
+        triggerAdminToast("Failed to delete product", "error");
       }
     }
   };
