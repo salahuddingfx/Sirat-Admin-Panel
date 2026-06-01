@@ -30,7 +30,7 @@ export function ProductsPage() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this product?")) {
+    triggerAdminConfirm("Are you sure you want to delete this product?", async () => {
       try {
         const response = await deleteProduct(id);
         if (response.success) {
@@ -41,7 +41,7 @@ export function ProductsPage() {
         console.error("Failed to delete product:", err);
         triggerAdminToast("Failed to delete product", "error");
       }
-    }
+    });
   };
 
   if (loading) return <div>Loading products...</div>;
