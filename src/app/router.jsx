@@ -13,6 +13,7 @@ const MessagesPage = lazy(() => import("../features/contact/pages/MessagesPage")
 const CustomersPage = lazy(() => import("../features/customers/pages/CustomersPage"));
 const SettingsPage = lazy(() => import("../features/settings/pages/SettingsPage").then(module => ({ default: module.SettingsPage })));
 const SalesPage = lazy(() => import("../features/sales/pages/SalesPage").then(module => ({ default: module.SalesPage })));
+const CategoriesPage = lazy(() => import("../features/categories/pages/CategoriesPage").then(module => ({ default: module.CategoriesPage })));
 
 export function AppRouter() {
   return (
@@ -20,6 +21,7 @@ export function AppRouter() {
       <Routes>
       <Route path="/" element={<DashboardPage />} />
       <Route path="/products" element={<ProductsPage />} />
+      <Route path="/categories" element={<CategoriesPage />} />
       <Route path="/orders" element={<OrdersPage />} />
       <Route path="/sales" element={<SalesPage />} />
       <Route path="/hero" element={<HeroPage />} />
