@@ -180,7 +180,7 @@ export function SalesPage() {
       const payment = o.paymentMethod?.toUpperCase();
       const itemsCount = (o.items || []).reduce((sum, item) => sum + item.quantity, 0);
       const shipping = o.shippingCharge || 0;
-      const netSales = o.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
       const total = o.totalAmount;
       const status = o.status?.toUpperCase();
 
@@ -541,7 +541,7 @@ export function SalesPage() {
                 <tbody>
                   {filteredOrders.map((o) => {
                     const customer = o.user?.name || o.guestInfo?.name || "Guest";
-                    const netSales = o.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
                     return (
                       <tr key={o._id}>
                         <td style={{ fontWeight: 700 }}>{o.orderId}</td>
@@ -583,7 +583,7 @@ export function SalesPage() {
               <tbody>
                 {filteredOrders.map((o) => {
                   const customer = o.user?.name || o.guestInfo?.name || "Guest";
-                  const netSales = o.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                  const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
                   return (
                     <tr key={o._id}>
                       <td>{o.orderId}</td>
