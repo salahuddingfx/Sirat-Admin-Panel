@@ -22,7 +22,7 @@ export function DashboardPage() {
       try {
         const response = await fetchStats();
         if (response.success) {
-          setStats(response.data);
+          setStats(prev => ({ ...prev, ...response.data }));
         }
       } catch (err) {
         console.error("Failed to load stats:", err);
@@ -61,9 +61,9 @@ export function DashboardPage() {
 
       <div className="metrics-grid">
         <MetricCard label="Revenue" value={`৳${stats.revenue}`} delta="Total lifetime" />
-        <MetricCard label="Orders" value={stats.orderCount.toString()} delta="Total lifetime" />
-        <MetricCard label="Customers" value={stats.userCount.toString()} delta="Registered users" />
-        <MetricCard label="Low stock" value={stats.lowStockCount.toString()} delta="Needs attention" />
+        <MetricCard label="Orders" value={(stats.orderCount || 0).toString()} delta="Total lifetime" />
+        <MetricCard label="Customers" value={(stats.userCount || 0).toString()} delta="Registered users" />
+        <MetricCard label="Low stock" value={(stats.lowStockCount || 0).toString()} delta="Needs attention" />
       </div>
 
       <div className="content-grid">
@@ -75,7 +75,7 @@ export function DashboardPage() {
             className="panel-header"
           />
           <div className="activity-list">
-            {stats.recentOrders.map((order) => (
+            {stats.recentOrders?.map((order) => (
               <div key={order._id} className="activity-item">
                 <div className="item-info">
                   <span className="item-id">{order.orderId}</span>
@@ -101,7 +101,7 @@ export function DashboardPage() {
             className="panel-header"
           />
           <div className="activity-list">
-            {stats.recentProducts.map((product) => (
+            {stats.recentProducts?.map((product) => (
               <div key={product._id} className="activity-item">
                 <div className="item-info">
                   <span className="item-id">{product.name}</span>
