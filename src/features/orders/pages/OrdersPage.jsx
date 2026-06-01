@@ -16,21 +16,26 @@ export function OrdersPage() {
     contentRef: invoiceRef,
   });
 
-  const loadOrders = async () => {
+  const loadOrders = async (signal) => {
     try {
-      const response = await fetchOrders();
+      const response = await fetchOrders({ signal });
       if (response.success) {
         setOrders(response.data);
       }
     } catch (err) {
-      console.error("Failed to load orders:", err);
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error("Failed to load orders:", err);
+        triggerAdminToast("Failed to load orders", "error");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadOrders();
+    const controller = new AbortController();
+    loadOrders(controller.signal);
+    return () => controller.abort();
   }, []);
 
   const handleStatusChange = async (id, newStatus) => {
