@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
-import { fetchProducts, deleteProduct, createProduct, updateProduct } from "../../../lib/api/queries";
+import { fetchProducts, deleteProduct, createProduct, updateProduct, fetchCategories } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
@@ -122,6 +122,24 @@ function ProductModal({ product, onClose, onRefresh }) {
   });
   const [images, setImages] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categoriesList, setCategoriesList] = useState([]);
+
+  useEffect(() => {
+    const loadCats = async () => {
+      try {
+        const res = await fetchCategories();
+        if (res.success) {
+          setCategoriesList(res.data);
+          if (!product && res.data.length > 0 && !formData.category) {
+            setFormData(prev => ({ ...prev, category: res.data[0].name }));
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load categories:", e);
+      }
+    };
+    loadCats();
+  }, [product]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -202,12 +220,15 @@ function ProductModal({ product, onClose, onRefresh }) {
           <div className="form-row">
             <div className="form-group">
               <label>Category</label>
-              <input 
-                type="text" 
+              <select 
                 required 
                 value={formData.category} 
-                onChange={e => setFormData({...formData, category: e.target.value})} 
-              />
+                onChange={e => setFormData({...formData, category: e.target.value})}
+              >
+                {categoriesList.map(c => (
+                  <option key={c._id} value={c.name}>{c.name}</option>
+                ))}
+              </select>
             </div>
             <div className="form-group">
               <label>Stock</label>
