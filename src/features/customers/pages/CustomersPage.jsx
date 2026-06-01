@@ -3,6 +3,7 @@ import { User, Shield, Trash2, Mail, Phone } from "lucide-react";
 import { fetchAllUsers, updateUserRole, adminDeleteUser } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
+import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
 
 export default function CustomersPage() {
   const [users, setUsers] = useState([]);
@@ -24,25 +25,27 @@ export default function CustomersPage() {
   }, []);
 
   const handleRoleChange = async (id, newRole) => {
-    if (!window.confirm(`Change user role to ${newRole}?`)) return;
-    try {
-      await updateUserRole(id, newRole);
-      setUsers(users.map((u) => u._id === id ? { ...u, role: newRole } : u));
-      triggerAdminToast("User role updated", "success");
-    } catch (err) {
-      triggerAdminToast("Failed to update role", "error");
-    }
+    triggerAdminConfirm(`Change user role to ${newRole}?`, async () => {
+      try {
+        await updateUserRole(id, newRole);
+        setUsers(users.map((u) => u._id === id ? { ...u, role: newRole } : u));
+        triggerAdminToast("User role updated", "success");
+      } catch (err) {
+        triggerAdminToast("Failed to update role", "error");
+      }
+    });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user? This cannot be undone.")) return;
-    try {
-      await adminDeleteUser(id);
-      setUsers(users.filter((u) => u._id !== id));
-      triggerAdminToast("User deleted successfully", "success");
-    } catch (err) {
-      triggerAdminToast("Failed to delete user", "error");
-    }
+    triggerAdminConfirm("Are you sure you want to delete this user? This cannot be undone.", async () => {
+      try {
+        await adminDeleteUser(id);
+        setUsers(users.filter((u) => u._id !== id));
+        triggerAdminToast("User deleted successfully", "success");
+      } catch (err) {
+        triggerAdminToast("Failed to delete user", "error");
+      }
+    });
   };
 
   return (
