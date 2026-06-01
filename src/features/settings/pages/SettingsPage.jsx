@@ -17,7 +17,11 @@ export function SettingsPage() {
     logo: "",
     bkashNumber: "",
     nagadNumber: "",
-    rocketNumber: ""
+    rocketNumber: "",
+    pinterest: "",
+    youtube: "",
+    tiktok: "",
+    twitter: ""
   });
   const [logoFile, setLogoFile] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
@@ -44,7 +48,11 @@ export function SettingsPage() {
             logo: res.data.logo || "",
             bkashNumber: res.data.bkashNumber || "",
             nagadNumber: res.data.nagadNumber || "",
-            rocketNumber: res.data.rocketNumber || ""
+            rocketNumber: res.data.rocketNumber || "",
+            pinterest: res.data.pinterest || "",
+            youtube: res.data.youtube || "",
+            tiktok: res.data.tiktok || "",
+            twitter: res.data.twitter || ""
           });
         }
       } catch (err) {
@@ -100,7 +108,11 @@ export function SettingsPage() {
           logo: res.data.logo || "",
           bkashNumber: res.data.bkashNumber || "",
           nagadNumber: res.data.nagadNumber || "",
-          rocketNumber: res.data.rocketNumber || ""
+          rocketNumber: res.data.rocketNumber || "",
+          pinterest: res.data.pinterest || "",
+          youtube: res.data.youtube || "",
+          tiktok: res.data.tiktok || "",
+          twitter: res.data.twitter || ""
         });
         setLogoFile(null);
         setLogoPreview(null);
@@ -314,6 +326,34 @@ export function SettingsPage() {
               value={settings.whatsapp}
               onChange={handleChange}
               placeholder="https://wa.me/8801700000000"
+            />
+            <Input
+              label="Pinterest Profile URL"
+              name="pinterest"
+              value={settings.pinterest}
+              onChange={handleChange}
+              placeholder="https://pinterest.com/yourbrand"
+            />
+            <Input
+              label="YouTube Channel URL"
+              name="youtube"
+              value={settings.youtube}
+              onChange={handleChange}
+              placeholder="https://youtube.com/c/yourchannel"
+            />
+            <Input
+              label="TikTok Profile URL"
+              name="tiktok"
+              value={settings.tiktok}
+              onChange={handleChange}
+              placeholder="https://tiktok.com/@yourbrand"
+            />
+            <Input
+              label="Twitter/X Profile URL"
+              name="twitter"
+              value={settings.twitter}
+              onChange={handleChange}
+              placeholder="https://x.com/yourbrand"
             />
           </div>
         </Card>
