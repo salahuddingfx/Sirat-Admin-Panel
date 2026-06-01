@@ -9,6 +9,7 @@ import "./OrdersPage.css";
 export function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const invoiceRef = useRef();
 
@@ -40,12 +41,19 @@ export function OrdersPage() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
+      setIsProcessing(true);
       const response = await updateOrderStatus(id, newStatus);
       if (response.success) {
         loadOrders(); // Refresh list
+        triggerAdminToast("Order status updated", "success");
+      } else {
+        triggerAdminToast(response.message || "Failed to update order status", "error");
       }
     } catch (err) {
       console.error("Failed to update status:", err);
+      triggerAdminToast("An error occurred while updating status", "error");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
