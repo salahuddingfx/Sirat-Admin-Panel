@@ -115,6 +115,7 @@ function ProductModal({ product, onClose, onRefresh }) {
     description: product?.description || "",
     price: product?.price || "",
     oldPrice: product?.oldPrice || "",
+    costPrice: product?.costPrice || "",
     category: product?.category || "",
     stock: product?.stock || "",
     status: product?.status || "Live"
@@ -215,6 +216,15 @@ function ProductModal({ product, onClose, onRefresh }) {
                 required 
                 value={formData.stock} 
                 onChange={e => setFormData({...formData, stock: e.target.value})} 
+              />
+            </div>
+            <div className="form-group">
+              <label>Cost Price (৳)</label>
+              <input 
+                type="number" 
+                value={formData.costPrice} 
+                onChange={e => setFormData({...formData, costPrice: e.target.value})} 
+                placeholder="Optional"
               />
             </div>
           </div>

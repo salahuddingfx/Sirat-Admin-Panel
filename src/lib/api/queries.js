@@ -151,6 +151,11 @@ export const fetchSettings = async () => {
 };
 
 export const updateSettings = async (settingsData) => {
-  const response = await api.put("/settings", settingsData);
+  const isFormData = settingsData instanceof FormData;
+  const response = await api.put("/settings", settingsData, {
+    headers: {
+      "Content-Type": isFormData ? "multipart/form-data" : "application/json"
+    }
+  });
   return response.data;
 };
