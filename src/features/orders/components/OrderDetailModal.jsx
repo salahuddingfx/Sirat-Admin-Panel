@@ -7,6 +7,7 @@ import "./OrderDetailModal.css";
 export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange }) {
   const [guestInfo, setGuestInfo] = useState({ ...(order.guestInfo || {}) });
   const [saving, setSaving] = useState(false);
+  const [updatingPayment, setUpdatingPayment] = useState(false);
 
   const handleSave = async () => {
     setSaving(true);
