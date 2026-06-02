@@ -81,12 +81,11 @@ export default function HeroPage() {
       <SectionHeader
         title="Hero Slider"
         description="Manage the main homepage visuals and banners."
-        actions={
-          <Button onClick={() => { setCurrentSlide(null); setIsModalOpen(true); }}>
-            <Plus size={18} /> Add New Slide
-          </Button>
-        }
-      />
+      >
+        <Button onClick={() => { setCurrentSlide(null); setIsModalOpen(true); }}>
+          <Plus size={18} /> Add New Slide
+        </Button>
+      </SectionHeader>
 
       <div className="grid-container" style={{ marginTop: "2rem" }}>
         {loading ? (
