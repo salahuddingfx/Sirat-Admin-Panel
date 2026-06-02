@@ -60,6 +60,22 @@
   overflow: hidden;
 }
 
+.hero-page {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.hero-page .product-card {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.hero-slide-content h4 {
+  word-break: break-word;
+}
+
 @media (max-width: 768px) {
   .hero-slide-card .hero-slide-content {
     width: 100%;
@@ -68,11 +84,9 @@
 
   .hero-slide-content h4 {
     font-size: 0.95rem;
-    word-break: break-word;
   }
 
   .hero-slide-content .muted {
     font-size: 0.8rem !important;
-    word-break: break-word;
   }
 }
