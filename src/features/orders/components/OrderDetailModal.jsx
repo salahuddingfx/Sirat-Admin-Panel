@@ -64,12 +64,12 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
               <div className="info-row"><span>Status</span>
                 {order.paymentStatus === "approved" ? <Badge variant="success">Paid</Badge>
                   : order.paymentStatus === "rejected" ? <Badge variant="error">Rejected</Badge>
-                  : <Badge variant="warning">Pending</Badge>}
+                  : <Badge variant="warning">Unpaid</Badge>}
               </div>
               <div className="info-row"><span>Total</span><strong>{CURRENCY_SYMBOL}{order.totalAmount}</strong></div>
               {order.paymentDetails?.txId && <div className="info-row"><span>TxID</span><span style={{ fontSize: "0.8rem" }}>{order.paymentDetails.txId}</span></div>}
               {order.paymentDetails?.senderNumber && <div className="info-row"><span>Sender</span><span>{order.paymentDetails.senderNumber}</span></div>}
-              {order.paymentMethod !== "cod" && onPaymentStatusChange && (
+              {onPaymentStatusChange && (
                 <div className="info-row" style={{ marginTop: "0.75rem", gap: "0.5rem" }}>
                   <span>Payment</span>
                   <select
@@ -85,8 +85,8 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
                     className="status-select"
                     style={{ fontSize: "0.8125rem", padding: "0.25rem 0.5rem" }}
                   >
-                    <option value="pending">Pending</option>
-                    <option value="approved">Approved</option>
+                    <option value="pending">Unpaid</option>
+                    <option value="approved">Paid</option>
                     <option value="rejected">Rejected</option>
                   </select>
                 </div>
