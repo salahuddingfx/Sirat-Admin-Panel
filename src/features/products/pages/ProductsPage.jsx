@@ -383,7 +383,7 @@ function ProductModal({ product, onClose, onRefresh }) {
               <div className="image-preview-grid">
                 {existingImages.map((url, i) => (
                   <div key={i} className="image-preview-item">
-                    <img src={url} alt={`Product ${i + 1}`} />
+                    <img src={url} alt={`${product?.name || "Product"} image ${i + 1}`} />
                     <button
                       type="button"
                       className="image-preview-remove"
