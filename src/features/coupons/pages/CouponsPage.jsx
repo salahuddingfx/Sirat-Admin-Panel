@@ -4,6 +4,7 @@ import { fetchAllCoupons, deleteCoupon, createCoupon, updateCoupon } from "../..
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
+import "./CouponsPage.css";
 
 export default function CouponsPage() {
   const [coupons, setCoupons] = useState([]);
