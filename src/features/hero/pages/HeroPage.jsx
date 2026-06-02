@@ -4,6 +4,7 @@ import { fetchHeroSlides, deleteHeroSlide, createHeroSlide, updateHeroSlide } fr
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
+import "./HeroPage.css";
 
 export default function HeroPage() {
   const [slides, setSlides] = useState([]);
@@ -94,16 +95,16 @@ export default function HeroPage() {
           <div className="products-list">
             {slides.map((slide) => (
               <Card key={slide._id} className="product-card">
-                <div style={{ display: "flex", gap: "1.5rem" }}>
-                  <div className="product-image-preview" style={{ width: "120px", height: "80px" }}>
+                <div className="hero-slide-card">
+                  <div className="hero-slide-preview">
                     {slide.image ? (
-                      <img src={slide.image} alt={slide.title} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }} />
+                      <img src={slide.image} alt={slide.title} />
                     ) : (
                       <ImageIcon size={24} />
                     )}
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  <div className="hero-slide-content">
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
                         <h4 style={{ margin: 0 }}>{slide.title}</h4>
                         <span className={`badge ${slide.isActive ? "badge-success" : "badge-outline"}`}>
                             {slide.isActive ? "Active" : "Inactive"}
@@ -114,7 +115,7 @@ export default function HeroPage() {
                       <Button variant="outline" size="sm" onClick={() => { setCurrentSlide(slide); setIsModalOpen(true); }}>
                         <Edit2 size={14} /> Edit
                       </Button>
-                      <Button variant="outline" size="sm" onClick={() => handleDelete(slide._id)} style={{ color: "var(--sirat-error)" }} disabled={isProcessing}>
+                      <Button variant="outline" size="sm" onClick={() => handleDelete(slide._id)} style={{ color: "var(--color-error)" }} disabled={isProcessing}>
                         <Trash2 size={14} /> Delete
                       </Button>
                     </div>
