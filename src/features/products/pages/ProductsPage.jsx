@@ -341,31 +341,67 @@ function ProductModal({ product, onClose, onRefresh }) {
             <div className="form-group">
               <label>Variants (Sizes)</label>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                {variants.map((v, i) => (
-                  <div key={i} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                {/* Row 1: Size labels + delete + add */}
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                  {variants.map((v, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
+                      <input
+                        type="text"
+                        placeholder="Size"
+                        value={v.label}
+                        onChange={e => {
+                          const updated = [...variants];
+                          updated[i] = { ...updated[i], label: e.target.value };
+                          setVariants(updated);
+                        }}
+                        style={{ width: "52px", padding: "0.4rem 0.3rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", textAlign: "center", fontWeight: "700", fontSize: "0.85rem" }}
+                      />
+                      <input
+                        type="number"
+                        placeholder="+৳"
+                        value={v.priceDelta}
+                        onChange={e => {
+                          const updated = [...variants];
+                          updated[i] = { ...updated[i], priceDelta: parseInt(e.target.value) || 0 };
+                          setVariants(updated);
+                        }}
+                        style={{ width: "50px", padding: "0.4rem 0.3rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", textAlign: "center", fontSize: "0.8rem" }}
+                        title="Extra price for this size"
+                      />
+                      {variants.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setVariants(variants.filter((_, idx) => idx !== i))}
+                          style={{ color: "var(--color-error)", background: "none", border: "none", cursor: "pointer", fontSize: "1.1rem", padding: "0.1rem", lineHeight: 1 }}
+                          title="Remove size"
+                        >
+                          &times;
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setVariants([...variants, { label: "", priceDelta: 0, stock: 0 }])}
+                    style={{
+                      padding: "0.35rem 0.6rem",
+                      fontSize: "0.78rem",
+                      background: "var(--color-surface-soft)",
+                      border: "1px dashed var(--color-border-strong)",
+                      borderRadius: "var(--radius-sm)",
+                      cursor: "pointer",
+                      color: "var(--color-text-muted)",
+                      whiteSpace: "nowrap"
+                    }}
+                  >
+                    + Size
+                  </button>
+                </div>
+                {/* Row 2: Stock under each size */}
+                <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                  {variants.map((v, i) => (
                     <input
-                      type="text"
-                      placeholder="Size"
-                      value={v.label}
-                      onChange={e => {
-                        const updated = [...variants];
-                        updated[i] = { ...updated[i], label: e.target.value };
-                        setVariants(updated);
-                      }}
-                      style={{ width: "60px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", textAlign: "center", fontWeight: "700" }}
-                    />
-                    <input
-                      type="number"
-                      placeholder="Price +"
-                      value={v.priceDelta}
-                      onChange={e => {
-                        const updated = [...variants];
-                        updated[i] = { ...updated[i], priceDelta: parseInt(e.target.value) || 0 };
-                        setVariants(updated);
-                      }}
-                      style={{ width: "80px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)" }}
-                    />
-                    <input
+                      key={i}
                       type="number"
                       placeholder="Stock"
                       value={v.stock}
@@ -374,36 +410,10 @@ function ProductModal({ product, onClose, onRefresh }) {
                         updated[i] = { ...updated[i], stock: parseInt(e.target.value) || 0 };
                         setVariants(updated);
                       }}
-                      style={{ width: "70px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)" }}
+                      style={{ width: "108px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", fontSize: "0.85rem" }}
                     />
-                    {variants.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => setVariants(variants.filter((_, idx) => idx !== i))}
-                        style={{ color: "var(--color-error)", background: "none", border: "none", cursor: "pointer", fontSize: "1.1rem", padding: "0.2rem" }}
-                        title="Remove size"
-                      >
-                        &times;
-                      </button>
-                    )}
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => setVariants([...variants, { label: "", priceDelta: 0, inStock: true }])}
-                  style={{
-                    alignSelf: "flex-start",
-                    padding: "0.35rem 0.75rem",
-                    fontSize: "0.8rem",
-                    background: "var(--color-surface-soft)",
-                    border: "1px dashed var(--color-border-strong)",
-                    borderRadius: "var(--radius-sm)",
-                    cursor: "pointer",
-                    color: "var(--color-text-muted)"
-                  }}
-                >
-                  + Add Size
-                </button>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="form-group">
