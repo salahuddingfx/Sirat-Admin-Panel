@@ -3,6 +3,7 @@ import { Save, Phone, Mail, MapPin, Globe, Share2, CreditCard, Image as ImageIco
 import { fetchSettings, updateSettings } from "../../../lib/api/queries";
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
+import "./SettingsPage.css";
 
 const FORM_CONTAINER_STYLE = { marginTop: "2rem", display: "grid", gap: "2rem" };
 const CARD_PADDING_STYLE = { padding: "2rem" };
