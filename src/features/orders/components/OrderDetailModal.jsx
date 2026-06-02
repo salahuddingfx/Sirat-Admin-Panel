@@ -74,8 +74,12 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
                   <div style={{ display: "flex", gap: "0.35rem" }}>
                     <Button
                       variant="ghost"
-                      onClick={() => onPaymentStatusChange(order._id, "approved")}
-                      disabled={order.paymentStatus === "approved"}
+                      onClick={async () => {
+                        setUpdatingPayment(true);
+                        await onPaymentStatusChange(order._id, "approved");
+                        setUpdatingPayment(false);
+                      }}
+                      disabled={order.paymentStatus === "approved" || updatingPayment}
                       title="Approve Payment"
                       style={{ color: "var(--color-success)", padding: "0.25rem 0.5rem" }}
                     >
@@ -83,8 +87,12 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
                     </Button>
                     <Button
                       variant="ghost"
-                      onClick={() => onPaymentStatusChange(order._id, "rejected")}
-                      disabled={order.paymentStatus === "rejected"}
+                      onClick={async () => {
+                        setUpdatingPayment(true);
+                        await onPaymentStatusChange(order._id, "rejected");
+                        setUpdatingPayment(false);
+                      }}
+                      disabled={order.paymentStatus === "rejected" || updatingPayment}
                       title="Reject Payment"
                       style={{ color: "var(--color-error)", padding: "0.25rem 0.5rem" }}
                     >
