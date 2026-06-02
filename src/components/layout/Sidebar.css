@@ -1,3 +1,11 @@
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 49;
+}
+
 .sidebar {
   width: 280px;
   height: 100vh;
@@ -9,10 +17,11 @@
   flex-direction: column;
   padding: 2rem 1.5rem;
   z-index: 50;
-  overflow-y: auto; /* Added for scrollability */
+  overflow-y: auto;
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Custom scrollbar for sidebar */
 .sidebar::-webkit-scrollbar {
   width: 4px;
 }
@@ -23,6 +32,25 @@
 
 .sidebar__brand {
   margin-bottom: 3rem;
+}
+
+.sidebar__brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-close-btn {
+  display: none;
+  padding: 0.35rem;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  transition: var(--transition-fast);
+}
+
+.sidebar-close-btn:hover {
+  background: var(--color-surface-soft);
+  color: var(--color-text);
 }
 
 .brand-text {
@@ -83,6 +111,25 @@
 
 @media (max-width: 1024px) {
   .sidebar {
-    display: none; /* Will implement mobile drawer later */
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar--open {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: block;
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
