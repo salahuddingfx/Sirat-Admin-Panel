@@ -64,6 +64,7 @@ export function OrdersPage() {
 
   const handlePaymentApprove = async (id) => {
     try {
+      setIsProcessing(true);
       const res = await updatePaymentStatus(id, "approved");
       if (res.success) {
         loadOrders();
@@ -71,11 +72,14 @@ export function OrdersPage() {
       }
     } catch (err) {
       triggerAdminToast("Failed to approve payment", "error");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const handlePaymentReject = async (id) => {
     try {
+      setIsProcessing(true);
       const res = await updatePaymentStatus(id, "rejected");
       if (res.success) {
         loadOrders();
@@ -83,6 +87,8 @@ export function OrdersPage() {
       }
     } catch (err) {
       triggerAdminToast("Failed to reject payment", "error");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -209,10 +215,10 @@ export function OrdersPage() {
                     ) : (
                       <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
                         <Badge variant="warning">Pending</Badge>
-                        <Button variant="ghost" onClick={() => handlePaymentApprove(order._id)} title="Approve Payment" style={{ color: "var(--color-success)" }}>
+                        <Button variant="ghost" onClick={() => handlePaymentApprove(order._id)} title="Approve Payment" disabled={isProcessing} style={{ color: "var(--color-success)" }}>
                           <CheckCircle size={16} />
                         </Button>
-                        <Button variant="ghost" onClick={() => handlePaymentReject(order._id)} title="Reject Payment" style={{ color: "var(--color-error)" }}>
+                        <Button variant="ghost" onClick={() => handlePaymentReject(order._id)} title="Reject Payment" disabled={isProcessing} style={{ color: "var(--color-error)" }}>
                           <XCircle size={16} />
                         </Button>
                       </div>
