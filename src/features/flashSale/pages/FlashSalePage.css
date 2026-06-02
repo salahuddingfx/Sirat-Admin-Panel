@@ -86,3 +86,25 @@
   font-size: 0.75rem;
   color: var(--color-text-muted);
 }
+
+.flash-sale-grid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+  .flash-sale-card {
+    padding: 1rem;
+  }
+
+  .flash-sale-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .products-select-list {
+    max-height: 250px;
+  }
+}
