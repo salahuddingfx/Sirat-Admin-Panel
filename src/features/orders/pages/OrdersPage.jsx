@@ -255,6 +255,24 @@ export function OrdersPage() {
       {detailOrder && (
         <OrderDetailModal order={detailOrder} onClose={() => setDetailOrder(null)} onSave={handleDetailSave} />
       )}
+
+      {deleteConfirm && (
+        <div className="modal-overlay" onClick={() => setDeleteConfirm(null)}>
+          <div className="modal-content confirm-dialog" onClick={(e) => e.stopPropagation()}>
+            <AlertTriangle size={40} style={{ color: "var(--color-error)", margin: "0 auto 1rem" }} />
+            <h3 style={{ textAlign: "center", margin: "0 0 0.5rem" }}>Delete Order?</h3>
+            <p style={{ textAlign: "center", color: "var(--color-text-muted)", marginBottom: "1.5rem", fontSize: "0.875rem" }}>
+              This will permanently delete <strong>{deleteConfirm.orderId}</strong> and restore stock for all items.
+            </p>
+            <div style={{ display: "flex", gap: "0.75rem", justifyContent: "center" }}>
+              <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+              <Button onClick={handleDeleteOrder} disabled={isProcessing} style={{ background: "var(--color-error)", color: "white" }}>
+                {isProcessing ? "Deleting..." : "Delete"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
