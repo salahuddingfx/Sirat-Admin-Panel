@@ -137,7 +137,7 @@ export function OrdersPage() {
                   </td>
                   <td>
                     {order.paymentMethod === "cod" ? (
-                      <Badge variant="success">COD</Badge>
+                      <Badge variant="default">COD</Badge>
                     ) : order.paymentStatus === "approved" ? (
                       <Badge variant="success">Paid</Badge>
                     ) : order.paymentStatus === "rejected" ? (
