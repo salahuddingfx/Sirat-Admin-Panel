@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
+import { Plus, Edit2, Trash2, Image as ImageIcon, Images } from "lucide-react";
 import { fetchProducts, deleteProduct, createProduct, updateProduct, fetchCategories } from "../../../lib/api/queries";
-import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
+import { Button, Card, SectionHeader, Badge, ImageGallery } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
@@ -13,6 +13,8 @@ export function ProductsPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [galleryProduct, setGalleryProduct] = useState(null);
+  const [galleryIndex, setGalleryIndex] = useState(0);
 
   const loadProducts = async (signal) => {
     try {
@@ -116,6 +118,11 @@ export function ProductsPage() {
                   </td>
                   <td>
                     <div className="action-buttons">
+                      {product.images?.length > 0 && (
+                        <Button variant="ghost" onClick={() => { setGalleryProduct(product); setGalleryIndex(0); }} title="View Images">
+                          <Images size={16} />
+                        </Button>
+                      )}
                       <Button variant="ghost" onClick={() => { setEditingProduct(product); setShowModal(true); }}>
                         <Edit2 size={16} />
                       </Button>
@@ -138,6 +145,14 @@ export function ProductsPage() {
           onRefresh={loadProducts} 
         />
       )}
+
+      {galleryProduct && (
+        <ImageGallery
+          images={galleryProduct.images}
+          initialIndex={galleryIndex}
+          onClose={() => setGalleryProduct(null)}
+        />
+      )}
     </div>
   );
 }
@@ -157,7 +172,9 @@ function ProductModal({ product, onClose, onRefresh }) {
     featured: product?.featured || false,
     status: product?.status || "Live"
   });
-  const [images, setImages] = useState([]);
+  const [existingImages, setExistingImages] = useState(product?.images || []);
+  const [newImages, setNewImages] = useState([]);
+  const [newImagePreviews, setNewImagePreviews] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categoriesList, setCategoriesList] = useState([]);
 
@@ -178,20 +195,37 @@ function ProductModal({ product, onClose, onRefresh }) {
     loadCats();
   }, [product]);
 
+  const handleRemoveExisting = (index) => {
+    setExistingImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleNewImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImages(prev => [...prev, ...files]);
+    const previews = files.map(f => URL.createObjectURL(f));
+    setNewImagePreviews(prev => [...prev, ...previews]);
+  };
+
+  const handleRemoveNew = (index) => {
+    setNewImages(prev => prev.filter((_, i) => i !== index));
+    setNewImagePreviews(prev => {
+      URL.revokeObjectURL(prev[index]);
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const data = new FormData();
     Object.keys(formData).forEach(key => data.append(key, formData[key]));
-    // Ensure featured is sent as string for FormData
     if (typeof formData.featured !== 'undefined') {
       data.set('featured', String(formData.featured));
     }
-    if (images.length > 0) {
-      for (let i = 0; i < images.length; i++) {
-        data.append("images", images[i]);
-      }
+    data.append("keepImages", JSON.stringify(existingImages));
+    for (let i = 0; i < newImages.length; i++) {
+      data.append("images", newImages[i]);
     }
 
     try {
@@ -345,10 +379,45 @@ function ProductModal({ product, onClose, onRefresh }) {
           </div>
           <div className="form-group">
             <label>Images</label>
+            {existingImages.length > 0 && (
+              <div className="image-preview-grid">
+                {existingImages.map((url, i) => (
+                  <div key={i} className="image-preview-item">
+                    <img src={url} alt={`Product ${i + 1}`} />
+                    <button
+                      type="button"
+                      className="image-preview-remove"
+                      onClick={() => handleRemoveExisting(i)}
+                      title="Remove image"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {newImagePreviews.length > 0 && (
+              <div className="image-preview-grid">
+                {newImagePreviews.map((url, i) => (
+                  <div key={`new-${i}`} className="image-preview-item">
+                    <img src={url} alt={`New ${i + 1}`} />
+                    <button
+                      type="button"
+                      className="image-preview-remove"
+                      onClick={() => handleRemoveNew(i)}
+                      title="Remove image"
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
             <input 
               type="file" 
               multiple 
-              onChange={e => setImages(e.target.files)} 
+              accept="image/*"
+              onChange={handleNewImagesChange} 
             />
           </div>
           <div className="modal-actions">
