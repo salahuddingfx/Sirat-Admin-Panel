@@ -77,7 +77,7 @@ export default function HeroPage() {
   };
 
   return (
-    <div className="admin-page">
+    <div className="admin-page hero-page">
       <SectionHeader
         title="Hero Slider"
         description="Manage the main homepage visuals and banners."
