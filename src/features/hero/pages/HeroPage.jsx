@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Plus, Edit2, Trash2, Image as ImageIcon, Upload } from "lucide-react";
-import { fetchHeroSlides, deleteHeroSlide, createHeroSlide, updateHeroSlide } from "../../../lib/api/queries";
+import { fetchHeroSlides, deleteHeroSlide, createHeroSlide, updateHeroSlide, fetchProducts } from "../../../lib/api/queries";
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
