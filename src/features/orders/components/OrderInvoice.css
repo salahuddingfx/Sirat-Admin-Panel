@@ -16,6 +16,19 @@
   align-items: flex-start;
 }
 
+.inv-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inv-logo-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 .inv-logo {
   margin: 0;
   font-size: 2rem;
