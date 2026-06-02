@@ -112,7 +112,26 @@ export function ProductsPage() {
                       {CURRENCY_SYMBOL}{product?.price}
                     </span>
                   </td>
-                  <td>{product?.stock}</td>
+                  <td>
+                    <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap" }}>
+                      {product?.variants?.map((v) => (
+                        <span key={v._id || v.label} style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "0.2rem",
+                          padding: "0.15rem 0.45rem",
+                          borderRadius: "4px",
+                          fontSize: "0.72rem",
+                          fontWeight: "700",
+                          background: v.inStock ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                          color: v.inStock ? "#10B981" : "#EF4444"
+                        }}>
+                          {v.label}
+                          <span style={{ opacity: 0.6 }}>{v.priceDelta > 0 ? `+${v.priceDelta}` : ""}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </td>
                   <td>
                     <Badge variant={product?.status === 'Live' ? 'success' : 'warning'}>{product?.status}</Badge>
                   </td>
@@ -237,6 +256,7 @@ function ProductModal({ product, onClose, onRefresh }) {
     for (let i = 0; i < newImages.length; i++) {
       data.append("images", newImages[i]);
     }
+    data.append("variants", JSON.stringify(variants.filter(v => v.label.trim())));
 
     try {
       let response;
@@ -316,13 +336,73 @@ function ProductModal({ product, onClose, onRefresh }) {
               </select>
             </div>
             <div className="form-group">
-              <label>Stock</label>
-              <input 
-                type="number" 
-                required 
-                value={formData.stock} 
-                onChange={e => setFormData({...formData, stock: e.target.value})} 
-              />
+              <label>Variants (Sizes)</label>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                {variants.map((v, i) => (
+                  <div key={i} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+                    <input
+                      type="text"
+                      placeholder="Size"
+                      value={v.label}
+                      onChange={e => {
+                        const updated = [...variants];
+                        updated[i] = { ...updated[i], label: e.target.value };
+                        setVariants(updated);
+                      }}
+                      style={{ width: "60px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", textAlign: "center", fontWeight: "700" }}
+                    />
+                    <input
+                      type="number"
+                      placeholder="Price +"
+                      value={v.priceDelta}
+                      onChange={e => {
+                        const updated = [...variants];
+                        updated[i] = { ...updated[i], priceDelta: parseInt(e.target.value) || 0 };
+                        setVariants(updated);
+                      }}
+                      style={{ width: "80px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)" }}
+                    />
+                    <label style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
+                      <input
+                        type="checkbox"
+                        checked={v.inStock}
+                        onChange={e => {
+                          const updated = [...variants];
+                          updated[i] = { ...updated[i], inStock: e.target.checked };
+                          setVariants(updated);
+                        }}
+                      />
+                      In Stock
+                    </label>
+                    {variants.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => setVariants(variants.filter((_, idx) => idx !== i))}
+                        style={{ color: "var(--color-error)", background: "none", border: "none", cursor: "pointer", fontSize: "1.1rem", padding: "0.2rem" }}
+                        title="Remove size"
+                      >
+                        &times;
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => setVariants([...variants, { label: "", priceDelta: 0, inStock: true }])}
+                  style={{
+                    alignSelf: "flex-start",
+                    padding: "0.35rem 0.75rem",
+                    fontSize: "0.8rem",
+                    background: "var(--color-surface-soft)",
+                    border: "1px dashed var(--color-border-strong)",
+                    borderRadius: "var(--radius-sm)",
+                    cursor: "pointer",
+                    color: "var(--color-text-muted)"
+                  }}
+                >
+                  + Add Size
+                </button>
+              </div>
             </div>
             <div className="form-group">
               <label>Cost Price (৳)</label>
