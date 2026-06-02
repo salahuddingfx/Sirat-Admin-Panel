@@ -220,3 +220,51 @@ export const toggleFlashSale = async () => {
   const response = await api.patch("/admin/flash-sale/toggle");
   return response.data;
 };
+
+// Analytics
+export const fetchAnalyticsOverview = async (days = 30) => {
+  const response = await api.get(`/admin/analytics/overview?days=${days}`);
+  return response.data;
+};
+
+export const fetchAnalyticsTimeline = async (days = 7) => {
+  const response = await api.get(`/admin/analytics/timeline?days=${days}`);
+  return response.data;
+};
+
+export const fetchLiveVisitors = async (limit = 50) => {
+  const response = await api.get(`/admin/analytics/live?limit=${limit}`);
+  return response.data;
+};
+
+export const fetchAnalyticsVisitors = async ({ page = 1, limit = 50, country, device, search } = {}) => {
+  const params = new URLSearchParams();
+  params.set("page", String(page));
+  params.set("limit", String(limit));
+  if (country) params.set("country", country);
+  if (device) params.set("device", device);
+  if (search) params.set("search", search);
+  const response = await api.get(`/admin/analytics/visitors?${params.toString()}`);
+  return response.data;
+};
+
+export const fetchAnalyticsEvents = async ({ page = 1, limit = 100, type, category, sessionId } = {}) => {
+  const params = new URLSearchParams();
+  params.set("page", String(page));
+  params.set("limit", String(limit));
+  if (type) params.set("type", type);
+  if (category) params.set("category", category);
+  if (sessionId) params.set("sessionId", sessionId);
+  const response = await api.get(`/admin/analytics/events?${params.toString()}`);
+  return response.data;
+};
+
+export const fetchAnalyticsActions = async (days = 30) => {
+  const response = await api.get(`/admin/analytics/actions?days=${days}`);
+  return response.data;
+};
+
+export const fetchAnalyticsSessions = async (limit = 50) => {
+  const response = await api.get(`/admin/analytics/sessions?limit=${limit}`);
+  return response.data;
+};
