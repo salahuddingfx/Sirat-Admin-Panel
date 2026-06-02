@@ -1,3 +1,8 @@
+.admin-page .orders-card {
+  padding: 0;
+  overflow-x: auto;
+}
+
 .users-table {
   width: 100%;
   border-collapse: collapse;
