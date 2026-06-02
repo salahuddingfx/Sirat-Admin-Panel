@@ -96,7 +96,6 @@ export function OrdersPage() {
     try {
       const res = await updatePaymentStatus(id, status);
       if (res.success) {
-        setDetailOrder(null);
         loadOrders();
         triggerAdminToast(`Payment ${status === "approved" ? "approved" : "rejected"}`, "success");
       }
