@@ -1,0 +1,5 @@
+@media (max-width: 600px) {
+  .settings-page [style*="grid-template-columns: 1fr 2fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
