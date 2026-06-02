@@ -55,6 +55,33 @@
   gap: 0.5rem;
 }
 
+.order-items-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.order-item-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+}
+
+.order-items-more {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  padding-left: 0.25rem;
+}
+
+.confirm-dialog {
+  max-width: 400px;
+  text-align: center;
+  padding: 2rem;
+}
+
 @media (max-width: 768px) {
   .orders-table th,
   .orders-table td {
