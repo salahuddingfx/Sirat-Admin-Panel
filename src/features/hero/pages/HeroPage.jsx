@@ -15,6 +15,8 @@ export default function HeroPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [linkType, setLinkType] = useState("url");
   const fileRef = useRef(null);
 
   const loadSlides = async (signal) => {
@@ -31,9 +33,21 @@ export default function HeroPage() {
     }
   };
 
+  const loadProducts = async () => {
+    try {
+      const res = await fetchProducts({ signal: new AbortController().signal });
+      if (res.success) setProducts(res.data);
+    } catch (err) {
+      if (err.name !== 'CanceledError' && err.name !== 'AbortError') {
+        console.error(err);
+      }
+    }
+  };
+
   useEffect(() => {
     const controller = new AbortController();
     loadSlides(controller.signal);
+    loadProducts();
     return () => controller.abort();
   }, []);
 
@@ -97,7 +111,7 @@ export default function HeroPage() {
         title="Hero Slider"
         description="Manage the main homepage visuals and banners."
       >
-        <Button onClick={() => { setCurrentSlide(null); setIsModalOpen(true); }}>
+        <Button onClick={() => { setCurrentSlide(null); setIsModalOpen(true); setLinkType("url"); }}>
           <Plus size={18} /> Add New Slide
         </Button>
       </SectionHeader>
