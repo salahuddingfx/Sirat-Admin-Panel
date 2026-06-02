@@ -112,7 +112,7 @@ export default function HeroPage() {
         title="Hero Slider"
         description="Manage the main homepage visuals and banners."
       >
-        <Button onClick={() => { setCurrentSlide(null); setIsModalOpen(true); setLinkType("url"); }}>
+        <Button onClick={() => { setCurrentSlide(null); setIsModalOpen(true); setLinkType("url"); setLinkValue("/shop"); }}>
           <Plus size={18} /> Add New Slide
         </Button>
       </SectionHeader>
@@ -143,7 +143,13 @@ export default function HeroPage() {
                     </div>
                     <p className="muted" style={{ fontSize: "0.875rem", margin: "0.5rem 0" }}>{slide.subtitle}</p>
                     <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-                      <Button variant="outline" size="sm" onClick={() => { setCurrentSlide(slide); setIsModalOpen(true); setLinkType(slide.link?.startsWith("/product/") ? "product" : "url"); }}>
+                      <Button variant="outline" size="sm" onClick={() => {
+                        const isProductLink = slide.link?.startsWith("/product/");
+                        setCurrentSlide(slide);
+                        setIsModalOpen(true);
+                        setLinkType(isProductLink ? "product" : "url");
+                        setLinkValue(slide.link || "/shop");
+                      }}>
                         <Edit2 size={14} /> Edit
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => handleDelete(slide._id)} style={{ color: "var(--color-error)" }} disabled={isProcessing}>
