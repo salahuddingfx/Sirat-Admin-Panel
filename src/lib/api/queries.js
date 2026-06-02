@@ -28,6 +28,16 @@ export const updatePaymentStatus = async (id, paymentStatus) => {
   return response.data;
 };
 
+export const fetchOrderById = async (id) => {
+  const response = await api.get(`/admin/orders/${id}`);
+  return response.data;
+};
+
+export const updateOrderDetails = async (id, data) => {
+  const response = await api.patch(`/admin/orders/${id}/details`, data);
+  return response.data;
+};
+
 // Products
 export const fetchProducts = async (options = {}) => {
   const response = await api.get("/products", options);
