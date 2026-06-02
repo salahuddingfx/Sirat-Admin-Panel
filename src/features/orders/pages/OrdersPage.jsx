@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Printer, Eye, ShoppingBag } from "lucide-react";
-import { fetchOrders, updateOrderStatus } from "../../../lib/api/queries";
+import { Printer, Eye, ShoppingBag, CheckCircle, XCircle, Clock } from "lucide-react";
+import { fetchOrders, updateOrderStatus, updatePaymentStatus } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
@@ -56,6 +56,30 @@ export function OrdersPage() {
       triggerAdminToast("An error occurred while updating status", "error");
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const handlePaymentApprove = async (id) => {
+    try {
+      const res = await updatePaymentStatus(id, "approved");
+      if (res.success) {
+        loadOrders();
+        triggerAdminToast("Payment approved", "success");
+      }
+    } catch (err) {
+      triggerAdminToast("Failed to approve payment", "error");
+    }
+  };
+
+  const handlePaymentReject = async (id) => {
+    try {
+      const res = await updatePaymentStatus(id, "rejected");
+      if (res.success) {
+        loadOrders();
+        triggerAdminToast("Payment rejected", "success");
+      }
+    } catch (err) {
+      triggerAdminToast("Failed to reject payment", "error");
     }
   };
 
