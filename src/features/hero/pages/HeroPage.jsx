@@ -17,6 +17,7 @@ export default function HeroPage() {
   const [imagePreview, setImagePreview] = useState(null);
   const [products, setProducts] = useState([]);
   const [linkType, setLinkType] = useState("url");
+  const [linkValue, setLinkValue] = useState("/shop");
   const fileRef = useRef(null);
 
   const loadSlides = async (signal) => {
