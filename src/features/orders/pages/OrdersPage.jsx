@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Printer, Eye, ShoppingBag, CheckCircle, XCircle, Clock } from "lucide-react";
+import { Printer, ShoppingBag, CheckCircle, XCircle } from "lucide-react";
 import { fetchOrders, updateOrderStatus, updatePaymentStatus } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
