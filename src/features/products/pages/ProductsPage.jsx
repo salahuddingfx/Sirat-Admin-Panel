@@ -341,7 +341,7 @@ function ProductModal({ product, onClose, onRefresh }) {
             <div className="form-group">
               <label>Variants (Sizes)</label>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                {/* Row 1: Size labels + delete + add */}
+                {/* Row 1: Size labels */}
                 <div style={{ display: "flex", gap: "0.5rem", alignItems: "center", flexWrap: "wrap" }}>
                   {variants.map((v, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
@@ -355,18 +355,6 @@ function ProductModal({ product, onClose, onRefresh }) {
                           setVariants(updated);
                         }}
                         style={{ width: "52px", padding: "0.4rem 0.3rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", textAlign: "center", fontWeight: "700", fontSize: "0.85rem" }}
-                      />
-                      <input
-                        type="number"
-                        placeholder="+৳"
-                        value={v.priceDelta}
-                        onChange={e => {
-                          const updated = [...variants];
-                          updated[i] = { ...updated[i], priceDelta: parseInt(e.target.value) || 0 };
-                          setVariants(updated);
-                        }}
-                        style={{ width: "50px", padding: "0.4rem 0.3rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", textAlign: "center", fontSize: "0.8rem" }}
-                        title="Extra price for this size"
                       />
                       {variants.length > 1 && (
                         <button
@@ -410,7 +398,7 @@ function ProductModal({ product, onClose, onRefresh }) {
                         updated[i] = { ...updated[i], stock: parseInt(e.target.value) || 0 };
                         setVariants(updated);
                       }}
-                      style={{ width: "108px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", fontSize: "0.85rem" }}
+                      style={{ width: "68px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)", fontSize: "0.85rem" }}
                     />
                   ))}
                 </div>
