@@ -68,7 +68,9 @@ export default function HeroPage() {
       setIsModalOpen(false);
       loadSlides();
     } catch (err) {
-      triggerAdminToast("Failed to save slide", "error");
+      console.error("Failed to save slide:", err);
+      const msg = err.response?.data?.message || err.message || "Failed to save slide";
+      triggerAdminToast(msg, "error");
     } finally {
       setIsSubmitting(false);
     }
