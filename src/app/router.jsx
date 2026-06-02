@@ -15,6 +15,7 @@ const SettingsPage = lazy(() => import("../features/settings/pages/SettingsPage"
 const SalesPage = lazy(() => import("../features/sales/pages/SalesPage").then(module => ({ default: module.SalesPage })));
 const CategoriesPage = lazy(() => import("../features/categories/pages/CategoriesPage").then(module => ({ default: module.CategoriesPage })));
 const FlashSalePage = lazy(() => import("../features/flashSale/pages/FlashSalePage"));
+const AnalyticsPage = lazy(() => import("../features/analytics/pages/AnalyticsPage").then(module => ({ default: module.AnalyticsPage })));
 
 export function AppRouter() {
   return (
@@ -31,6 +32,7 @@ export function AppRouter() {
       <Route path="/messages" element={<MessagesPage />} />
       <Route path="/customers" element={<CustomersPage />} />
       <Route path="/flash-sale" element={<FlashSalePage />} />
+      <Route path="/analytics" element={<AnalyticsPage />} />
       <Route path="/settings" element={<SettingsPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
