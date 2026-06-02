@@ -205,15 +205,13 @@ export function OrdersPage() {
                     )}
                   </td>
                   <td>
-                    {order.paymentMethod === "cod" ? (
-                      <Badge variant="default">COD</Badge>
-                    ) : order.paymentStatus === "approved" ? (
+                    {order.paymentStatus === "approved" ? (
                       <Badge variant="success">Paid</Badge>
                     ) : order.paymentStatus === "rejected" ? (
                       <Badge variant="error">Rejected</Badge>
                     ) : (
                       <div style={{ display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                        <Badge variant="warning">Pending</Badge>
+                        <Badge variant="warning">Unpaid</Badge>
                         <Button variant="ghost" onClick={() => handlePaymentApprove(order._id)} title="Approve Payment" disabled={isProcessing} style={{ color: "var(--color-success)" }}>
                           <CheckCircle size={16} />
                         </Button>
