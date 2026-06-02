@@ -142,7 +142,7 @@ export default function HeroPage() {
                     </div>
                     <p className="muted" style={{ fontSize: "0.875rem", margin: "0.5rem 0" }}>{slide.subtitle}</p>
                     <div style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}>
-                      <Button variant="outline" size="sm" onClick={() => { setCurrentSlide(slide); setIsModalOpen(true); }}>
+                      <Button variant="outline" size="sm" onClick={() => { setCurrentSlide(slide); setIsModalOpen(true); setLinkType(slide.link?.startsWith("/product/") ? "product" : "url"); }}>
                         <Edit2 size={14} /> Edit
                       </Button>
                       <Button variant="outline" size="sm" onClick={() => handleDelete(slide._id)} style={{ color: "var(--color-error)" }} disabled={isProcessing}>
@@ -208,7 +208,35 @@ export default function HeroPage() {
               <Input label="Description" name="description" defaultValue={currentSlide?.description} />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 <Input label="Button Text" name="actionText" defaultValue={currentSlide?.actionText || "Shop Now"} />
-                <Input label="Link" name="link" defaultValue={currentSlide?.link || "/shop"} />
+                <Input label="Order" name="order" type="number" defaultValue={currentSlide?.order || 0} />
+              </div>
+              {/* Link Type Toggle */}
+              <div className="form-group">
+                <label>Button Link</label>
+                <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
+                  <button type="button" className={`btn btn-sm ${linkType === "url" ? "btn-primary" : "btn-outline"}`} onClick={() => setLinkType("url")} style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}>
+                    Custom URL
+                  </button>
+                  <button type="button" className={`btn btn-sm ${linkType === "product" ? "btn-primary" : "btn-outline"}`} onClick={() => setLinkType("product")} style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}>
+                    Link to Product
+                  </button>
+                </div>
+                {linkType === "url" ? (
+                  <input name="link" defaultValue={currentSlide?.link && !currentSlide.link.startsWith("/product/") ? currentSlide.link : "/shop"} className="input" style={{ width: "100%", padding: "0.6rem 0.75rem" }} />
+                ) : (
+                  <select
+                    name="link"
+                    className="input"
+                    style={{ width: "100%", padding: "0.6rem 0.75rem" }}
+                    defaultValue={currentSlide?.link?.startsWith("/product/") ? currentSlide.link.replace("/product/", "") : ""}
+                    onChange={(e) => { e.target.closest('form').querySelector('[name="link"]').value = e.target.value ? `/product/${e.target.value}` : "/shop"; }}
+                  >
+                    <option value="">-- Select a product --</option>
+                    {products.map((p) => (
+                      <option key={p._id} value={p.slug}>{p.name}</option>
+                    ))}
+                  </select>
+                )}
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 <Input label="Order" name="order" type="number" defaultValue={currentSlide?.order || 0} />
