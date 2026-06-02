@@ -124,7 +124,7 @@ export default function FlashSalePage() {
         </div>
       </SectionHeader>
 
-      <div className="grid-container" style={{ marginTop: "2rem", display: "grid", gap: "1.5rem", gridTemplateColumns: "1fr 1fr" }}>
+      <div className="flash-sale-grid">
         <Card className="flash-sale-card">
           <h3 className="flash-sale-card-title"><Zap size={18} /> Sale Settings</h3>
           <form onSubmit={handleSave} style={{ display: "grid", gap: "1rem", marginTop: "1.25rem" }}>
