@@ -184,3 +184,19 @@ export const deleteCategory = async (id) => {
   const response = await api.delete(`/categories/${id}`);
   return response.data;
 };
+
+// Flash Sale
+export const fetchFlashSale = async () => {
+  const response = await api.get("/admin/flash-sale");
+  return response.data;
+};
+
+export const upsertFlashSale = async (data) => {
+  const response = await api.put("/admin/flash-sale", data);
+  return response.data;
+};
+
+export const toggleFlashSale = async () => {
+  const response = await api.patch("/admin/flash-sale/toggle");
+  return response.data;
+};
