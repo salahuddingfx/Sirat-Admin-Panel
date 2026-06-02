@@ -36,3 +36,14 @@
     height: 140px;
   }
 }
+
+@media (max-width: 600px) {
+  .hero-page .modal-content {
+    padding: 1.25rem;
+    margin: 0.5rem;
+  }
+
+  .hero-page .modal-content [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}
