@@ -12,11 +12,23 @@ export const OrderInvoice = React.forwardRef(({ order }, ref) => {
     shippingCharge,
     totalAmount,
     paymentMethod,
-    createdAt
+    createdAt,
+    paymentStatus
   } = order;
 
   const customer = user || guestInfo;
   const date = new Date(createdAt).toLocaleDateString();
+
+  const totalCost = (items || []).reduce((sum, item) => {
+    const baseCost = item.product?.costPrice ?? 0;
+    const pkgCost = item.product?.packagingCost || 0;
+    const mgmtCost = item.product?.managementCost || 0;
+    const othCost = item.product?.otherCost || 0;
+    return sum + (baseCost + pkgCost + mgmtCost + othCost) * (item.quantity || 0);
+  }, 0);
+
+  const netSales = (items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const profit = netSales - totalCost;
 
   return (
     <div className="invoice-container" ref={ref}>
@@ -29,6 +41,7 @@ export const OrderInvoice = React.forwardRef(({ order }, ref) => {
           <h2>INVOICE</h2>
           <p>Order ID: {orderId}</p>
           <p>Date: {date}</p>
+          <p>Payment: {paymentStatus?.toUpperCase()}</p>
         </div>
       </div>
 
@@ -45,6 +58,7 @@ export const OrderInvoice = React.forwardRef(({ order }, ref) => {
           <h3>Payment Method:</h3>
           <p>{paymentMethod.toUpperCase()}</p>
           {order.paymentDetails?.txId && <p>TxID: {order.paymentDetails.txId}</p>}
+          {order.paymentDetails?.senderNumber && <p>Sender: {order.paymentDetails.senderNumber}</p>}
         </div>
       </div>
 
@@ -75,6 +89,18 @@ export const OrderInvoice = React.forwardRef(({ order }, ref) => {
         <div className="summary-row">
           <span>Shipping:</span>
           <span>৳{shippingCharge}</span>
+        </div>
+        <div className="summary-row">
+          <span>Net Sales:</span>
+          <span>৳{netSales}</span>
+        </div>
+        <div className="summary-row">
+          <span>Total Cost:</span>
+          <span>৳{totalCost}</span>
+        </div>
+        <div className="summary-row" style={{ color: profit >= 0 ? "var(--color-success)" : "var(--color-error)", fontWeight: 600 }}>
+          <span>Profit:</span>
+          <span>৳{profit}</span>
         </div>
         <div className="summary-row total">
           <span>Amount Paid:</span>
