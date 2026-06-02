@@ -17,11 +17,13 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 .products-page .orders-table td {
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid var(--color-border);
+  white-space: nowrap;
 }
 
 .product-thumb {
@@ -164,4 +166,40 @@
 
 .toggle-switch:focus-within .toggle-track {
   box-shadow: 0 0 0 4px rgba(197,160,89,0.12);
+}
+
+@media (max-width: 768px) {
+  .products-page .orders-table th,
+  .products-page .orders-table td {
+    padding: 0.85rem 1rem;
+  }
+
+  .products-page .orders-table td {
+    font-size: 0.875rem;
+  }
+
+  .product-thumb {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    padding: 1.25rem;
+    margin: 0.5rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions .btn {
+    width: 100%;
+  }
 }
