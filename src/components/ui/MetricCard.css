@@ -42,3 +42,8 @@
   color: var(--color-success);
   background: rgba(22, 101, 52, 0.08);
 }
+
+.metric-card__delta.negative {
+  color: var(--color-error);
+  background: rgba(220, 38, 38, 0.08);
+}
