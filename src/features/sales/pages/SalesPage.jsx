@@ -76,35 +76,44 @@ export function SalesPage() {
   // Financial calculations
   const stats = useMemo(() => {
     if (filteredOrders.length === 0) {
-      return { revenue: 0, cost: 0, profit: 0, shipping: 0, gross: 0, count: 0, aov: 0 };
+      return { revenue: 0, cost: 0, productCost: 0, packagingCost: 0, managementCost: 0, otherCost: 0, profit: 0, shipping: 0, gross: 0, count: 0, aov: 0 };
     }
 
-    let gross = 0; // total collected including shipping
-    let shipping = 0; // total shipping charges
-    let revenue = 0; // net sales (gross - shipping)
-    let cost = 0; // product cost
+    let gross = 0;
+    let shipping = 0;
+    let revenue = 0;
+    let productCost = 0;
+    let packagingCost = 0;
+    let managementCost = 0;
+    let otherCost = 0;
 
     filteredOrders.forEach(o => {
       gross += o.totalAmount;
       shipping += (o.shippingCharge || 0);
       
-      // Calculate revenue & cost at item level
       o.items?.forEach(item => {
         const itemPrice = item.price || 0;
         const itemQty = item.quantity || 0;
         revenue += itemPrice * itemQty;
         
-        // Fallback cost to 50% of selling price if costPrice is not defined
-        const itemCost = item.product?.costPrice ?? (itemPrice * 0.5);
-        cost += itemCost * itemQty;
+        const baseCost = item.product?.costPrice ?? (itemPrice * 0.5);
+        const pkgCost = item.product?.packagingCost || 0;
+        const mgmtCost = item.product?.managementCost || 0;
+        const othCost = item.product?.otherCost || 0;
+
+        productCost += baseCost * itemQty;
+        packagingCost += pkgCost * itemQty;
+        managementCost += mgmtCost * itemQty;
+        otherCost += othCost * itemQty;
       });
     });
 
+    const cost = productCost + packagingCost + managementCost + otherCost;
     const profit = revenue - cost;
     const count = filteredOrders.length;
     const aov = count > 0 ? Math.round(revenue / count) : 0;
 
-    return { revenue, cost, profit, shipping, gross, count, aov };
+    return { revenue, cost, productCost, packagingCost, managementCost, otherCost, profit, shipping, gross, count, aov };
   }, [filteredOrders]);
 
   // Chart data: Group revenue & orders by date
@@ -169,6 +178,8 @@ export function SalesPage() {
       "Items Count",
       "Courier Charge (৳)",
       "Product Sales (৳)",
+      "Total Cost (৳)",
+      "Profit (৳)",
       "Total Paid (৳)",
       "Fulfillment Status"
     ];
@@ -181,6 +192,14 @@ export function SalesPage() {
       const itemsCount = (o.items || []).reduce((sum, item) => sum + item.quantity, 0);
       const shipping = o.shippingCharge || 0;
       const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      const orderCost = (o.items || []).reduce((sum, item) => {
+        const baseCost = item.product?.costPrice ?? (item.price * 0.5);
+        const pkgCost = item.product?.packagingCost || 0;
+        const mgmtCost = item.product?.managementCost || 0;
+        const othCost = item.product?.otherCost || 0;
+        return sum + (baseCost + pkgCost + mgmtCost + othCost) * (item.quantity || 0);
+      }, 0);
+      const profit = netSales - orderCost;
       const total = o.totalAmount;
       const status = o.status?.toUpperCase();
 
@@ -192,6 +211,8 @@ export function SalesPage() {
         itemsCount,
         shipping,
         netSales,
+        orderCost,
+        profit,
         total,
         status
       ];
@@ -412,10 +433,10 @@ export function SalesPage() {
           delta="Excludes delivery charges"
         />
         <MetricCard
-          label="Estimated Cost"
+          label="Total Cost"
           value={`৳${stats.cost.toLocaleString()}`}
           icon={ShoppingBag}
-          delta="Product production expense"
+          delta={`Product ৳${stats.productCost.toLocaleString()} | Pkg ৳${stats.packagingCost.toLocaleString()} | Mgmt ৳${stats.managementCost.toLocaleString()} | Other ৳${stats.otherCost.toLocaleString()}`}
         />
         <MetricCard
           label="Net Profit"
@@ -525,45 +546,57 @@ export function SalesPage() {
           <Card className="product-card" style={{ padding: "2rem" }}>
             <h3 style={{ margin: "0 0 1rem" }}>Sales Ledger Records ({filteredOrders.length})</h3>
             <div className="sales-table-wrapper">
-              <table className="sales-table">
-                <thead>
-                  <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Date</th>
-                    <th>Gateway</th>
-                    <th>Courier Fee</th>
-                    <th>Net Sales</th>
-                    <th>Total Paid</th>
-                    <th>Fulfillment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredOrders.map((o) => {
-                    const customer = o.user?.name || o.guestInfo?.name || "Guest";
-                    const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                    return (
-                      <tr key={o._id}>
-                        <td style={{ fontWeight: 700 }}>{o.orderId}</td>
-                        <td>{customer}</td>
-                        <td>{new Date(o.createdAt).toLocaleDateString()}</td>
-                        <td style={{ textTransform: "uppercase" }}>{o.paymentMethod}</td>
-                        <td>৳{o.shippingCharge || 0}</td>
-                        <td>৳{netSales}</td>
-                        <td style={{ fontWeight: 700 }}>৳{o.totalAmount}</td>
-                        <td>
-                          <span className={`badge ${
-                            o.status === "delivered" ? "badge-success" : 
-                            o.status === "cancelled" ? "badge-outline" : "badge-warning"
-                          }`}>
-                            {o.status}
-                          </span>
-                        </td>
+                  <table className="sales-table">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Gateway</th>
+                        <th>Courier Fee</th>
+                        <th>Net Sales</th>
+                        <th>Total Cost</th>
+                        <th>Profit</th>
+                        <th>Total Paid</th>
+                        <th>Fulfillment</th>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                    </thead>
+                    <tbody>
+                      {filteredOrders.map((o) => {
+                        const customer = o.user?.name || o.guestInfo?.name || "Guest";
+                        const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                        const orderCost = (o.items || []).reduce((sum, item) => {
+                          const baseCost = item.product?.costPrice ?? (item.price * 0.5);
+                          const pkgCost = item.product?.packagingCost || 0;
+                          const mgmtCost = item.product?.managementCost || 0;
+                          const othCost = item.product?.otherCost || 0;
+                          return sum + (baseCost + pkgCost + mgmtCost + othCost) * (item.quantity || 0);
+                        }, 0);
+                        const profit = netSales - orderCost;
+                        return (
+                          <tr key={o._id}>
+                            <td style={{ fontWeight: 700 }}>{o.orderId}</td>
+                            <td>{customer}</td>
+                            <td>{new Date(o.createdAt).toLocaleDateString()}</td>
+                            <td style={{ textTransform: "uppercase" }}>{o.paymentMethod}</td>
+                            <td>৳{o.shippingCharge || 0}</td>
+                            <td>৳{netSales}</td>
+                            <td>৳{orderCost.toLocaleString()}</td>
+                            <td style={{ fontWeight: 600, color: profit >= 0 ? "var(--color-success)" : "var(--color-error)" }}>৳{profit.toLocaleString()}</td>
+                            <td style={{ fontWeight: 700 }}>৳{o.totalAmount}</td>
+                            <td>
+                              <span className={`badge ${
+                                o.status === "delivered" ? "badge-success" : 
+                                o.status === "cancelled" ? "badge-outline" : "badge-warning"
+                              }`}>
+                                {o.status}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
             </div>
 
             {/* Printable Native Table (Only rendered when printed) */}
@@ -576,6 +609,8 @@ export function SalesPage() {
                   <th>Gateway</th>
                   <th>Courier Fee</th>
                   <th>Net Product Sales</th>
+                  <th>Total Cost</th>
+                  <th>Profit</th>
                   <th>Total Paid</th>
                   <th>Fulfillment</th>
                 </tr>
@@ -584,6 +619,14 @@ export function SalesPage() {
                 {filteredOrders.map((o) => {
                   const customer = o.user?.name || o.guestInfo?.name || "Guest";
                   const netSales = (o.items || []).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                  const orderCost = (o.items || []).reduce((sum, item) => {
+                    const baseCost = item.product?.costPrice ?? (item.price * 0.5);
+                    const pkgCost = item.product?.packagingCost || 0;
+                    const mgmtCost = item.product?.managementCost || 0;
+                    const othCost = item.product?.otherCost || 0;
+                    return sum + (baseCost + pkgCost + mgmtCost + othCost) * (item.quantity || 0);
+                  }, 0);
+                  const profit = netSales - orderCost;
                   return (
                     <tr key={o._id}>
                       <td>{o.orderId}</td>
@@ -592,6 +635,8 @@ export function SalesPage() {
                       <td>{o.paymentMethod?.toUpperCase()}</td>
                       <td>৳{o.shippingCharge || 0}</td>
                       <td>৳{netSales}</td>
+                      <td>৳{orderCost.toLocaleString()}</td>
+                      <td>৳{profit.toLocaleString()}</td>
                       <td>৳{o.totalAmount}</td>
                       <td>{o.status?.toUpperCase()}</td>
                     </tr>
