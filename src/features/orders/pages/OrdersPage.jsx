@@ -86,6 +86,19 @@ export function OrdersPage() {
     }
   };
 
+  const handlePaymentStatusFromModal = async (id, status) => {
+    try {
+      const res = await updatePaymentStatus(id, status);
+      if (res.success) {
+        setDetailOrder(null);
+        loadOrders();
+        triggerAdminToast(`Payment ${status === "approved" ? "approved" : "rejected"}`, "success");
+      }
+    } catch (err) {
+      triggerAdminToast("Failed to update payment status", "error");
+    }
+  };
+
   const handleDeleteOrder = async () => {
     if (!deleteConfirm) return;
     try {
