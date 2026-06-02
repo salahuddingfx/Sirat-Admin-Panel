@@ -5,6 +5,7 @@ import { fetchOrders, updateOrderStatus } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
+import { triggerAdminToast } from "../../../components/ui/AdminToast";
 
 export function OrdersPage() {
   const [orders, setOrders] = useState([]);
