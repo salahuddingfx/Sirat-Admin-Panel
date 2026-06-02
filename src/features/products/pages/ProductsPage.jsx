@@ -114,7 +114,9 @@ export function ProductsPage() {
                   </td>
                   <td>
                     <div style={{ display: "flex", gap: "0.3rem", flexWrap: "wrap" }}>
-                      {product?.variants?.map((v) => (
+                      {product?.variants?.map((v) => {
+                        const inStock = v.stock > 0;
+                        return (
                         <span key={v._id || v.label} style={{
                           display: "inline-flex",
                           alignItems: "center",
@@ -123,13 +125,14 @@ export function ProductsPage() {
                           borderRadius: "4px",
                           fontSize: "0.72rem",
                           fontWeight: "700",
-                          background: v.inStock ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)",
-                          color: v.inStock ? "#10B981" : "#EF4444"
+                          background: inStock ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                          color: inStock ? "#10B981" : "#EF4444"
                         }}>
                           {v.label}
-                          <span style={{ opacity: 0.6 }}>{v.priceDelta > 0 ? `+${v.priceDelta}` : ""}</span>
+                          <span style={{ opacity: 0.6 }}>{v.stock}</span>
                         </span>
-                      ))}
+                        );
+                      })}
                     </div>
                   </td>
                   <td>
@@ -195,10 +198,10 @@ function ProductModal({ product, onClose, onRefresh }) {
     product?.variants?.length > 0
       ? product.variants.map(v => ({ ...v }))
       : [
-          { label: "S", priceDelta: 0, inStock: true },
-          { label: "M", priceDelta: 0, inStock: true },
-          { label: "L", priceDelta: 0, inStock: true },
-          { label: "XL", priceDelta: 100, inStock: true },
+          { label: "S", priceDelta: 0, stock: 10 },
+          { label: "M", priceDelta: 0, stock: 10 },
+          { label: "L", priceDelta: 0, stock: 10 },
+          { label: "XL", priceDelta: 100, stock: 5 },
         ]
   );
   const [existingImages, setExistingImages] = useState(product?.images || []);
@@ -362,18 +365,17 @@ function ProductModal({ product, onClose, onRefresh }) {
                       }}
                       style={{ width: "80px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)" }}
                     />
-                    <label style={{ display: "flex", alignItems: "center", gap: "0.3rem", fontSize: "0.8rem", whiteSpace: "nowrap" }}>
-                      <input
-                        type="checkbox"
-                        checked={v.inStock}
-                        onChange={e => {
-                          const updated = [...variants];
-                          updated[i] = { ...updated[i], inStock: e.target.checked };
-                          setVariants(updated);
-                        }}
-                      />
-                      In Stock
-                    </label>
+                    <input
+                      type="number"
+                      placeholder="Stock"
+                      value={v.stock}
+                      onChange={e => {
+                        const updated = [...variants];
+                        updated[i] = { ...updated[i], stock: parseInt(e.target.value) || 0 };
+                        setVariants(updated);
+                      }}
+                      style={{ width: "70px", padding: "0.4rem 0.5rem", border: "1px solid var(--color-border)", borderRadius: "var(--radius-sm)" }}
+                    />
                     {variants.length > 1 && (
                       <button
                         type="button"
