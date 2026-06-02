@@ -175,7 +175,7 @@ export function ImageGallery({ images, initialIndex = 0, onClose, alt = "Image" 
               className={`gallery-thumb ${i === currentIndex ? "gallery-thumb--active" : ""}`}
               onClick={() => goTo(i)}
             >
-              <img src={img} alt={`Thumb ${i + 1}`} />
+              <img src={img} alt={`${alt} thumbnail ${i + 1}`} />
             </button>
           ))}
         </div>
