@@ -253,7 +253,7 @@ export function OrdersPage() {
       </div>
 
       {detailOrder && (
-        <OrderDetailModal order={detailOrder} onClose={() => setDetailOrder(null)} onSave={handleDetailSave} />
+        <OrderDetailModal order={detailOrder} onClose={() => setDetailOrder(null)} onSave={handleDetailSave} onPaymentStatusChange={handlePaymentStatusFromModal} />
       )}
 
       {deleteConfirm && (
