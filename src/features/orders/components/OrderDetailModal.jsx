@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { X, Package, MapPin, CreditCard, User, Phone, Mail, Save } from "lucide-react";
+import { X, Package, MapPin, CreditCard, User, Save } from "lucide-react";
 import { Button, Badge } from "../../../components/ui";
 import { CURRENCY_SYMBOL } from "../../../lib/constants";
+import "./OrderDetailModal.css";
 
 export function OrderDetailModal({ order, onClose, onSave }) {
   const [guestInfo, setGuestInfo] = useState({ ...(order.guestInfo || {}) });
