@@ -165,7 +165,7 @@ export default function HeroPage() {
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay" onClick={() => { setIsModalOpen(false); setImageFile(null); setImagePreview(null); }}>
+        <div className="modal-overlay" onClick={() => { setIsModalOpen(false); setImageFile(null); setImagePreview(null); setLinkValue("/shop"); }}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{currentSlide ? "Edit Slide" : "Add New Slide"}</h3>
             <form onSubmit={(e) => { e.preventDefault(); handleSubmit(e); }} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
