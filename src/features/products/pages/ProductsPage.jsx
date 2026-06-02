@@ -149,6 +149,9 @@ function ProductModal({ product, onClose, onRefresh }) {
     price: product?.price || "",
     oldPrice: product?.oldPrice || "",
     costPrice: product?.costPrice || "",
+    packagingCost: product?.packagingCost || "",
+    managementCost: product?.managementCost || "",
+    otherCost: product?.otherCost || "",
     category: product?.category || "",
     stock: product?.stock || "",
     featured: product?.featured || false,
@@ -283,6 +286,33 @@ function ProductModal({ product, onClose, onRefresh }) {
                 type="number" 
                 value={formData.costPrice} 
                 onChange={e => setFormData({...formData, costPrice: e.target.value})} 
+                placeholder="Optional"
+              />
+            </div>
+            <div className="form-group">
+              <label>Packaging Cost (৳)</label>
+              <input 
+                type="number" 
+                value={formData.packagingCost} 
+                onChange={e => setFormData({...formData, packagingCost: e.target.value})} 
+                placeholder="Optional"
+              />
+            </div>
+            <div className="form-group">
+              <label>Management Cost (৳)</label>
+              <input 
+                type="number" 
+                value={formData.managementCost} 
+                onChange={e => setFormData({...formData, managementCost: e.target.value})} 
+                placeholder="Optional"
+              />
+            </div>
+            <div className="form-group">
+              <label>Other Cost (৳)</label>
+              <input 
+                type="number" 
+                value={formData.otherCost} 
+                onChange={e => setFormData({...formData, otherCost: e.target.value})} 
                 placeholder="Optional"
               />
             </div>
