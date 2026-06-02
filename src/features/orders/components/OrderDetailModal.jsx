@@ -76,6 +76,11 @@ export function OrderDetailModal({ order, onClose, onSave }) {
             <div className="order-items-list">
               {order.items?.map((item, i) => (
                 <div key={i} className="order-item-row">
+                  <img
+                    src={item.product?.images?.[0] || "/placeholder.png"}
+                    alt={item.product?.name || "Product"}
+                    className="order-item-detail-thumb"
+                  />
                   <div className="order-item-name">
                     <strong>{item.product?.name || "Product"}</strong>
                     {item.variant && <span className="order-item-variant">{item.variant}</span>}
