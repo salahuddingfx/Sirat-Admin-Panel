@@ -75,7 +75,7 @@ export default function HeroPage() {
     fd.append("subtitle", e.target.subtitle.value || "");
     fd.append("description", e.target.description.value || "");
     fd.append("actionText", e.target.actionText.value || "Shop Now");
-    fd.append("link", e.target.link.value || "/shop");
+    fd.append("link", linkValue || "/shop");
     fd.append("order", parseInt(e.target.order.value) || 0);
     fd.append("isActive", e.target.isActive.checked ? "true" : "false");
 
@@ -221,22 +221,22 @@ export default function HeroPage() {
               <div className="form-group">
                 <label>Button Link</label>
                 <div style={{ display: "flex", gap: "0.5rem", marginBottom: "0.5rem" }}>
-                  <button type="button" className={`btn btn-sm ${linkType === "url" ? "btn-primary" : "btn-outline"}`} onClick={() => setLinkType("url")} style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}>
+                  <button type="button" className={`btn btn-sm ${linkType === "url" ? "btn-primary" : "btn-outline"}`} onClick={() => { setLinkType("url"); setLinkValue("/shop"); }} style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}>
                     Custom URL
                   </button>
-                  <button type="button" className={`btn btn-sm ${linkType === "product" ? "btn-primary" : "btn-outline"}`} onClick={() => setLinkType("product")} style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}>
+                  <button type="button" className={`btn btn-sm ${linkType === "product" ? "btn-primary" : "btn-outline"}`} onClick={() => { setLinkType("product"); setLinkValue(""); }} style={{ padding: "0.4rem 0.8rem", fontSize: "0.8rem" }}>
                     Link to Product
                   </button>
                 </div>
                 {linkType === "url" ? (
-                  <input name="link" defaultValue={currentSlide?.link && !currentSlide.link.startsWith("/product/") ? currentSlide.link : "/shop"} className="input" style={{ width: "100%", padding: "0.6rem 0.75rem" }} />
+                  <input name="link" value={linkValue} onChange={(e) => setLinkValue(e.target.value)} className="input" style={{ width: "100%", padding: "0.6rem 0.75rem" }} />
                 ) : (
                   <select
                     name="link"
                     className="input"
                     style={{ width: "100%", padding: "0.6rem 0.75rem" }}
-                    defaultValue={currentSlide?.link?.startsWith("/product/") ? currentSlide.link.replace("/product/", "") : ""}
-                    onChange={(e) => { e.target.closest('form').querySelector('[name="link"]').value = e.target.value ? `/product/${e.target.value}` : "/shop"; }}
+                    value={linkValue.replace("/product/", "")}
+                    onChange={(e) => setLinkValue(e.target.value ? `/product/${e.target.value}` : "/shop")}
                   >
                     <option value="">-- Select a product --</option>
                     {products.map((p) => (
