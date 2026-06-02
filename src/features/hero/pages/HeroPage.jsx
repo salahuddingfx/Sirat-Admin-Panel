@@ -252,7 +252,7 @@ export default function HeroPage() {
                 </label>
               </div>
               <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1rem" }}>
-                <Button type="button" variant="outline" onClick={() => { setIsModalOpen(false); setImageFile(null); setImagePreview(null); }}>Cancel</Button>
+                <Button type="button" variant="outline" onClick={() => { setIsModalOpen(false); setImageFile(null); setImagePreview(null); setLinkValue("/shop"); }}>Cancel</Button>
                 <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Save Slide"}</Button>
               </div>
             </form>
