@@ -38,6 +38,11 @@ export const updateOrderDetails = async (id, data) => {
   return response.data;
 };
 
+export const deleteOrder = async (id) => {
+  const response = await api.delete(`/admin/orders/${id}`);
+  return response.data;
+};
+
 // Products
 export const fetchProducts = async (options = {}) => {
   const response = await api.get("/products", options);
