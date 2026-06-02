@@ -54,21 +54,28 @@ export default function HeroPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    data.isActive = formData.get("isActive") === "on";
-    data.order = parseInt(data.order) || 0;
+    const fd = new FormData();
+    fd.append("image", imageFile || currentSlide?.image || "");
+    fd.append("title", e.target.title.value);
+    fd.append("subtitle", e.target.subtitle.value || "");
+    fd.append("description", e.target.description.value || "");
+    fd.append("actionText", e.target.actionText.value || "Shop Now");
+    fd.append("link", e.target.link.value || "/shop");
+    fd.append("order", parseInt(e.target.order.value) || 0);
+    fd.append("isActive", e.target.isActive.checked ? "true" : "false");
 
     setIsSubmitting(true);
     try {
       if (currentSlide) {
-        await updateHeroSlide(currentSlide._id, data);
+        await updateHeroSlide(currentSlide._id, fd);
         triggerAdminToast("Slide updated", "success");
       } else {
-        await createHeroSlide(data);
+        await createHeroSlide(fd);
         triggerAdminToast("Slide created", "success");
       }
       setIsModalOpen(false);
+      setImageFile(null);
+      setImagePreview(null);
       loadSlides();
     } catch (err) {
       console.error("Failed to save slide:", err);
