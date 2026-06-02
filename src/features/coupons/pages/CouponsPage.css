@@ -23,7 +23,18 @@
   box-shadow: var(--shadow-lg);
 }
 
-.coupons-page .modal-content h3 {
+.modal-content h3 {
   margin: 0;
   font-size: 1.25rem;
+}
+
+@media (max-width: 600px) {
+  .admin-page .modal-content {
+    padding: 1.25rem;
+    margin: 0.5rem;
+  }
+
+  .admin-page .modal-overlay {
+    padding: 10px;
+  }
 }
