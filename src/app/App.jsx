@@ -4,7 +4,7 @@ import { LoginPage } from "../features/auth/pages/LoginPage";
 import { AppRouter } from "./router";
 import { navItems } from "../features/dashboard/data/mockData";
 import { Button } from "../components/ui";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, User } from "lucide-react";
 import { login } from "../lib/api/queries";
 import AdminToast, { triggerAdminToast } from "../components/ui/AdminToast";
 import AdminConfirm from "../components/ui/AdminConfirm";
@@ -73,7 +73,7 @@ export function App() {
                     {user.avatar ? (
                       <img src={user.avatar} alt={user.name} />
                     ) : (
-                      <span className="initials">{(user.name || 'A').split(' ').map(s => s[0]).slice(0,2).join('')}</span>
+                      <User size={18} className="initials" />
                     )}
                   </div>
                   <div className="header__meta">
