@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Printer, ShoppingBag, CheckCircle, XCircle } from "lucide-react";
-import { fetchOrders, updateOrderStatus, updatePaymentStatus } from "../../../lib/api/queries";
+import { Printer, ShoppingBag, CheckCircle, XCircle, Eye } from "lucide-react";
+import { fetchOrders, updateOrderStatus, updatePaymentStatus, updateOrderDetails } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
+import { OrderDetailModal } from "../components/OrderDetailModal";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import "./OrdersPage.css";
@@ -13,6 +14,7 @@ export function OrdersPage() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [detailOrder, setDetailOrder] = useState(null);
   const invoiceRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -46,7 +48,7 @@ export function OrdersPage() {
       setIsProcessing(true);
       const response = await updateOrderStatus(id, newStatus);
       if (response.success) {
-        loadOrders(); // Refresh list
+        loadOrders();
         triggerAdminToast("Order status updated", "success");
       } else {
         triggerAdminToast(response.message || "Failed to update order status", "error");
@@ -80,6 +82,20 @@ export function OrdersPage() {
       }
     } catch (err) {
       triggerAdminToast("Failed to reject payment", "error");
+    }
+  };
+
+  const handleDetailSave = async (data) => {
+    if (!detailOrder) return;
+    try {
+      const res = await updateOrderDetails(detailOrder._id, data);
+      if (res.success) {
+        triggerAdminToast("Order details updated", "success");
+        setDetailOrder(null);
+        loadOrders();
+      }
+    } catch (err) {
+      triggerAdminToast(err.response?.data?.message || "Failed to update order", "error");
     }
   };
 
@@ -121,7 +137,7 @@ export function OrdersPage() {
                   <td>
                     <div className="customer-cell">
                       <span>{order.user?.name || order.guestInfo?.name}</span>
-                      <small>{order.user?.email || order.guestInfo?.email}</small>
+                      <small>{order.user?.email || order.guestInfo?.email || order.guestInfo?.phone}</small>
                     </div>
                   </td>
                   <td>{new Date(order.createdAt).toLocaleDateString()}</td>
@@ -171,6 +187,9 @@ export function OrdersPage() {
                   </td>
                   <td>
                     <div className="action-buttons">
+                      <Button variant="ghost" onClick={() => setDetailOrder(order)} title="View Details">
+                        <Eye size={16} />
+                      </Button>
                       <Button
                         variant="ghost"
                         onClick={() => {
@@ -190,10 +209,13 @@ export function OrdersPage() {
         )}
       </Card>
 
-      {/* Hidden Invoice Component for Printing */}
       <div style={{ display: "none" }}>
         <OrderInvoice ref={invoiceRef} order={selectedOrder} />
       </div>
+
+      {detailOrder && (
+        <OrderDetailModal order={detailOrder} onClose={() => setDetailOrder(null)} onSave={handleDetailSave} />
+      )}
     </div>
   );
 }
