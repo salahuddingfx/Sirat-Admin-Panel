@@ -236,6 +236,9 @@ export function OrdersPage() {
                       >
                         <Printer size={16} />
                       </Button>
+                      <Button variant="ghost" onClick={() => setDeleteConfirm(order)} title="Delete Order" style={{ color: "var(--color-error)" }}>
+                        <Trash2 size={16} />
+                      </Button>
                     </div>
                   </td>
                 </tr>
