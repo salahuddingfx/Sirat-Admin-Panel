@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { X, Package, MapPin, CreditCard, User, Save, CheckCircle, XCircle } from "lucide-react";
+import { X, Package, MapPin, CreditCard, User, Save } from "lucide-react";
 import { Button, Badge } from "../../../components/ui";
 import { CURRENCY_SYMBOL } from "../../../lib/constants";
 import "./OrderDetailModal.css";
@@ -7,6 +7,7 @@ import "./OrderDetailModal.css";
 export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange }) {
   const [guestInfo, setGuestInfo] = useState({ ...(order.guestInfo || {}) });
   const [saving, setSaving] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState(order.paymentStatus);
   const [updatingPayment, setUpdatingPayment] = useState(false);
 
   const handleSave = async () => {
@@ -70,35 +71,24 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
               {order.paymentDetails?.senderNumber && <div className="info-row"><span>Sender</span><span>{order.paymentDetails.senderNumber}</span></div>}
               {order.paymentMethod !== "cod" && onPaymentStatusChange && (
                 <div className="info-row" style={{ marginTop: "0.75rem", gap: "0.5rem" }}>
-                  <span>Action</span>
-                  <div style={{ display: "flex", gap: "0.35rem" }}>
-                    <Button
-                      variant="ghost"
-                      onClick={async () => {
-                        setUpdatingPayment(true);
-                        await onPaymentStatusChange(order._id, "approved");
-                        setUpdatingPayment(false);
-                      }}
-                      disabled={order.paymentStatus === "approved" || updatingPayment}
-                      title="Approve Payment"
-                      style={{ color: "var(--color-success)", padding: "0.25rem 0.5rem" }}
-                    >
-                      <CheckCircle size={16} /> Approve
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      onClick={async () => {
-                        setUpdatingPayment(true);
-                        await onPaymentStatusChange(order._id, "rejected");
-                        setUpdatingPayment(false);
-                      }}
-                      disabled={order.paymentStatus === "rejected" || updatingPayment}
-                      title="Reject Payment"
-                      style={{ color: "var(--color-error)", padding: "0.25rem 0.5rem" }}
-                    >
-                      <XCircle size={16} /> Reject
-                    </Button>
-                  </div>
+                  <span>Payment</span>
+                  <select
+                    value={paymentStatus}
+                    onChange={async (e) => {
+                      const newStatus = e.target.value;
+                      setPaymentStatus(newStatus);
+                      setUpdatingPayment(true);
+                      await onPaymentStatusChange(order._id, newStatus);
+                      setUpdatingPayment(false);
+                    }}
+                    disabled={updatingPayment}
+                    className="status-select"
+                    style={{ fontSize: "0.8125rem", padding: "0.25rem 0.5rem" }}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
                 </div>
               )}
             </div>
