@@ -159,6 +159,22 @@ export function OrdersPage() {
                       <small>{order.user?.email || order.guestInfo?.email || order.guestInfo?.phone}</small>
                     </div>
                   </td>
+                  <td>
+                    <div className="order-items-preview">
+                      {order.items?.slice(0, 3).map((item, i) => (
+                        <img
+                          key={i}
+                          src={item.product?.images?.[0] || "/placeholder.png"}
+                          alt={item.product?.name || "Product"}
+                          className="order-item-thumb"
+                          title={item.product?.name || "Product"}
+                        />
+                      ))}
+                      {order.items?.length > 3 && (
+                        <span className="order-items-more">+{order.items.length - 3}</span>
+                      )}
+                    </div>
+                  </td>
                   <td>{new Date(order.createdAt).toLocaleDateString()}</td>
                   <td>{CURRENCY_SYMBOL}{order.totalAmount}</td>
 
@@ -202,6 +218,7 @@ export function OrdersPage() {
                       <option value="shipped">Shipped</option>
                       <option value="delivered">Delivered</option>
                       <option value="cancelled">Cancelled</option>
+                      <option value="returned">Returned</option>
                     </select>
                   </td>
                   <td>
