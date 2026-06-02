@@ -73,7 +73,6 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
                   <div style={{ display: "flex", gap: "0.35rem" }}>
                     <Button
                       variant="ghost"
-                      size="sm"
                       onClick={() => onPaymentStatusChange(order._id, "approved")}
                       disabled={order.paymentStatus === "approved"}
                       title="Approve Payment"
@@ -83,7 +82,6 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
                     </Button>
                     <Button
                       variant="ghost"
-                      size="sm"
                       onClick={() => onPaymentStatusChange(order._id, "rejected")}
                       disabled={order.paymentStatus === "rejected"}
                       title="Reject Payment"
