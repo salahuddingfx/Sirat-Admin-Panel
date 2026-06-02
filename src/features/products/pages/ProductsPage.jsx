@@ -85,7 +85,7 @@ export function ProductsPage() {
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
-                <th>Stock</th>
+                <th>Sizes</th>
                 <th>Status</th>
                 <th>Actions</th>
               </tr>
@@ -169,10 +169,19 @@ function ProductModal({ product, onClose, onRefresh }) {
     managementCost: product?.managementCost || "",
     otherCost: product?.otherCost || "",
     category: product?.category || "",
-    stock: product?.stock || "",
     featured: product?.featured || false,
     status: product?.status || "Live"
   });
+  const [variants, setVariants] = useState(
+    product?.variants?.length > 0
+      ? product.variants.map(v => ({ ...v }))
+      : [
+          { label: "S", priceDelta: 0, inStock: true },
+          { label: "M", priceDelta: 0, inStock: true },
+          { label: "L", priceDelta: 0, inStock: true },
+          { label: "XL", priceDelta: 100, inStock: true },
+        ]
+  );
   const [existingImages, setExistingImages] = useState(product?.images || []);
   const [newImages, setNewImages] = useState([]);
   const [newImagePreviews, setNewImagePreviews] = useState([]);
