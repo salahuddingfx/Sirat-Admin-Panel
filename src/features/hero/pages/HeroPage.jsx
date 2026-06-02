@@ -64,6 +64,11 @@ export default function HeroPage() {
     fd.append("order", parseInt(e.target.order.value) || 0);
     fd.append("isActive", e.target.isActive.checked ? "true" : "false");
 
+    if (!currentSlide && !imageFile) {
+      triggerAdminToast("Please select an image", "error");
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       if (currentSlide) {
