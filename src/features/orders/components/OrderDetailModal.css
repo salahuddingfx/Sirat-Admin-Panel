@@ -75,6 +75,15 @@
   margin-bottom: 0.75rem;
 }
 
+.order-item-detail-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
 .order-item-row {
   display: flex;
   align-items: center;
