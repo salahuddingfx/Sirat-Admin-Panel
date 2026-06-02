@@ -40,8 +40,11 @@ export const OrderInvoice = React.forwardRef(({ order }, ref) => {
       {/* HEADER */}
       <div className="inv-header">
         <div className="inv-brand">
-          <h1 className="inv-logo">{COMPANY.name}</h1>
-          <p className="inv-tagline">Premium Streetwear</p>
+          <img src="/Sirat.png" alt="SIRAT logo" className="inv-logo-img" />
+          <div>
+            <h1 className="inv-logo">{COMPANY.name}</h1>
+            <p className="inv-tagline">Premium Streetwear</p>
+          </div>
         </div>
         <div className="inv-title-block">
           <h2 className="inv-title">INVOICE</h2>
