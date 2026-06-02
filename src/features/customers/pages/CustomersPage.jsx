@@ -4,6 +4,7 @@ import { fetchAllUsers, updateUserRole, adminDeleteUser } from "../../../lib/api
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
+import "./CustomersPage.css";
 
 export default function CustomersPage() {
   const [users, setUsers] = useState([]);
@@ -67,7 +68,7 @@ export default function CustomersPage() {
           <p>No users found.</p>
         ) : (
           <Card className="orders-card" style={{ padding: 0 }}>
-            <table className="orders-table">
+            <table className="users-table">
                 <thead>
                     <tr>
                         <th>User</th>
@@ -81,20 +82,20 @@ export default function CustomersPage() {
                     {users.map((u) => (
                         <tr key={u._id}>
                             <td>
-                                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                                    <div style={{ width: "32px", height: "32px", background: "var(--sirat-bg-alt)", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--sirat-gold)" }}>
+                                <div className="user-cell">
+                                    <div className="user-avatar">
                                         <User size={16} />
                                     </div>
                                     <div>
-                                        <strong style={{ display: "block" }}>{u?.name}</strong>
-                                        <small className="muted">@{u?.username || "no-username"}</small>
+                                        <strong className="user-name">{u?.name}</strong>
+                                        <small className="user-username">@{u?.username || "no-username"}</small>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <div style={{ display: "grid", gap: "0.25rem" }}>
-                                    <span style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.4rem" }}><Mail size={12} /> {u?.email}</span>
-                                    <span style={{ fontSize: "0.875rem", display: "flex", alignItems: "center", gap: "0.4rem" }}><Phone size={12} /> {u?.phone || "N/A"}</span>
+                                <div className="contact-cell">
+                                    <span className="contact-item"><Mail size={12} /> {u?.email}</span>
+                                    <span className="contact-item"><Phone size={12} /> {u?.phone || "N/A"}</span>
                                 </div>
                             </td>
                             <td>{u?.createdAt ? new Date(u.createdAt).toLocaleDateString() : 'N/A'}</td>
@@ -104,7 +105,7 @@ export default function CustomersPage() {
                                 </Badge>
                             </td>
                             <td>
-                                <div style={{ display: "flex", gap: "0.5rem" }}>
+                                <div className="action-cell">
                                     <Button 
                                         variant="outline" 
                                         size="sm" 
@@ -117,7 +118,7 @@ export default function CustomersPage() {
                                         variant="outline" 
                                         size="sm" 
                                         onClick={() => handleDelete(u._id)} 
-                                        style={{ color: "var(--sirat-error)" }}
+                                        style={{ color: "var(--color-error)" }}
                                         title="Delete User"
                                     >
                                         <Trash2 size={14} />
