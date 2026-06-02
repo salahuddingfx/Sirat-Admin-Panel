@@ -131,12 +131,11 @@ export default function CouponsPage() {
       <SectionHeader
         title="Discount Coupons"
         description="Create and manage promotional discount codes."
-        actions={
-          <Button onClick={() => { setCurrentCoupon(null); setIsModalOpen(true); }}>
-            <Plus size={18} /> Generate Coupon
-          </Button>
-        }
-      />
+      >
+        <Button onClick={() => { setCurrentCoupon(null); setIsModalOpen(true); }}>
+          <Plus size={18} /> Generate Coupon
+        </Button>
+      </SectionHeader>
 
       <div className="grid-container" style={{ marginTop: "2rem" }}>
         {loading ? (
