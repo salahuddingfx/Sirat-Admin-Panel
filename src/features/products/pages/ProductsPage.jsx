@@ -151,6 +151,7 @@ export function ProductsPage() {
           images={galleryProduct.images}
           initialIndex={galleryIndex}
           onClose={() => setGalleryProduct(null)}
+          alt={galleryProduct.name}
         />
       )}
     </div>
@@ -400,7 +401,7 @@ function ProductModal({ product, onClose, onRefresh }) {
               <div className="image-preview-grid">
                 {newImagePreviews.map((url, i) => (
                   <div key={`new-${i}`} className="image-preview-item">
-                    <img src={url} alt={`New ${i + 1}`} />
+                    <img src={url} alt={`${product?.name || "New product"} preview ${i + 1}`} />
                     <button
                       type="button"
                       className="image-preview-remove"
