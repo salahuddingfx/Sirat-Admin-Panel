@@ -47,3 +47,32 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+.products-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.grid-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .hero-slide-card .hero-slide-content {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .hero-slide-content h4 {
+    font-size: 0.95rem;
+    word-break: break-word;
+  }
+
+  .hero-slide-content .muted {
+    font-size: 0.8rem !important;
+    word-break: break-word;
+  }
+}
