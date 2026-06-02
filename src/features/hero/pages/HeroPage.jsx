@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Plus, Edit2, Trash2, Image as ImageIcon } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Plus, Edit2, Trash2, Image as ImageIcon, Upload } from "lucide-react";
 import { fetchHeroSlides, deleteHeroSlide, createHeroSlide, updateHeroSlide } from "../../../lib/api/queries";
 import { Button, Input, Card, SectionHeader } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
@@ -13,6 +13,9 @@ export default function HeroPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const fileRef = useRef(null);
 
   const loadSlides = async (signal) => {
     try {
@@ -129,11 +132,51 @@ export default function HeroPage() {
       </div>
 
       {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+        <div className="modal-overlay" onClick={() => { setIsModalOpen(false); setImageFile(null); setImagePreview(null); }}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>{currentSlide ? "Edit Slide" : "Add New Slide"}</h3>
-            <form onSubmit={handleSubmit} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
-              <Input label="Image URL" name="image" defaultValue={currentSlide?.image} required />
+            <form onSubmit={(e) => { e.preventDefault(); handleSubmit(e); }} style={{ display: "grid", gap: "1rem", marginTop: "1.5rem" }}>
+              {/* Image Upload */}
+              <div className="form-group">
+                <label>Slide Image</label>
+                <div className="hero-upload-area" onClick={() => fileRef.current?.click()} style={{
+                  border: "2px dashed var(--color-border)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "2rem 1rem",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  background: imagePreview ? "transparent" : "var(--color-surface-soft)",
+                  position: "relative",
+                  minHeight: "140px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}>
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Preview" style={{ maxHeight: "200px", borderRadius: "var(--radius-sm)", objectFit: "contain" }} />
+                  ) : currentSlide?.image ? (
+                    <img src={currentSlide.image} alt="Current" style={{ maxHeight: "200px", borderRadius: "var(--radius-sm)", objectFit: "contain" }} />
+                  ) : (
+                    <div style={{ color: "var(--color-text-muted)", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+                      <Upload size={24} />
+                      <span style={{ fontSize: "0.85rem" }}>Click to upload image</span>
+                    </div>
+                  )}
+                  <input
+                    ref={fileRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setImageFile(file);
+                        setImagePreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                </div>
+              </div>
               <Input label="Title" name="title" defaultValue={currentSlide?.title} required />
               <Input label="Subtitle" name="subtitle" defaultValue={currentSlide?.subtitle} />
               <Input label="Description" name="description" defaultValue={currentSlide?.description} />
@@ -148,7 +191,7 @@ export default function HeroPage() {
                 </label>
               </div>
               <div style={{ display: "flex", gap: "1rem", justifyContent: "flex-end", marginTop: "1rem" }}>
-                <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
+                <Button type="button" variant="outline" onClick={() => { setIsModalOpen(false); setImageFile(null); setImagePreview(null); }}>Cancel</Button>
                 <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Save Slide"}</Button>
               </div>
             </form>
