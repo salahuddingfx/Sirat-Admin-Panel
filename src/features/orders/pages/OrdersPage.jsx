@@ -6,6 +6,7 @@ import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
+import "./OrdersPage.css";
 
 export function OrdersPage() {
   const [orders, setOrders] = useState([]);
