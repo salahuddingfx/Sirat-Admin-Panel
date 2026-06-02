@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Printer, ShoppingBag, CheckCircle, XCircle, Eye } from "lucide-react";
-import { fetchOrders, updateOrderStatus, updatePaymentStatus, updateOrderDetails } from "../../../lib/api/queries";
+import { Printer, ShoppingBag, CheckCircle, XCircle, Eye, Trash2, AlertTriangle } from "lucide-react";
+import { fetchOrders, updateOrderStatus, updatePaymentStatus, updateOrderDetails, deleteOrder } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { OrderInvoice } from "../components/OrderInvoice";
 import { OrderDetailModal } from "../components/OrderDetailModal";
@@ -15,6 +15,7 @@ export function OrdersPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [detailOrder, setDetailOrder] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
   const invoiceRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -85,6 +86,23 @@ export function OrdersPage() {
     }
   };
 
+  const handleDeleteOrder = async () => {
+    if (!deleteConfirm) return;
+    try {
+      setIsProcessing(true);
+      const res = await deleteOrder(deleteConfirm._id);
+      if (res.success) {
+        triggerAdminToast("Order deleted successfully", "success");
+        setDeleteConfirm(null);
+        loadOrders();
+      }
+    } catch (err) {
+      triggerAdminToast(err.response?.data?.message || "Failed to delete order", "error");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const handleDetailSave = async (data) => {
     if (!detailOrder) return;
     try {
@@ -122,6 +140,7 @@ export function OrdersPage() {
               <tr>
                 <th>ID</th>
                 <th>Customer</th>
+                <th>Items</th>
                 <th>Date</th>
                 <th>Total</th>
                 <th>Payment</th>
