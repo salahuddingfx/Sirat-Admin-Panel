@@ -1,4 +1,4 @@
-import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Layout, Mail, TrendingUp, Settings, Tag } from "lucide-react";
+import { BarChart3, Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Layout, Mail, TrendingUp, Settings, Tag, Zap } from "lucide-react";
 
 export const navItems = [
   { label: "Dashboard", href: "/", icon: BarChart3 },
@@ -8,6 +8,7 @@ export const navItems = [
   { label: "Sales", href: "/sales", icon: TrendingUp },
   { label: "Hero Slider", href: "/hero", icon: Layout },
   { label: "Reviews", href: "/reviews", icon: MessageSquare },
+  { label: "Flash Sale", href: "/flash-sale", icon: Zap },
   { label: "Coupons", href: "/coupons", icon: BadgePercent },
   { label: "Messages", href: "/messages", icon: Mail },
   { label: "Customers", href: "/customers", icon: Users },
