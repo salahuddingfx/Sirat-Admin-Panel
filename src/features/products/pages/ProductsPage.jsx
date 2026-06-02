@@ -5,6 +5,7 @@ import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
 import { triggerAdminConfirm } from "../../../components/ui/AdminConfirm";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
+import "./ProductsPage.css";
 
 export function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -67,52 +68,68 @@ export function ProductsPage() {
         </Button>
       </SectionHeader>
 
-      <div className="products-grid">
+      <Card className="orders-card">
         {products?.length === 0 ? (
-          <Card className="empty-state-card" style={{ gridColumn: "1 / -1", padding: "3rem", textAlign: "center" }}>
+          <div style={{ padding: "3rem", textAlign: "center" }}>
             <ImageIcon size={48} className="muted" style={{ margin: "0 auto 1rem" }} />
             <h3>{UI_STRINGS.products.noItems}</h3>
             <p className="muted">{UI_STRINGS.products.noItemsDesc}</p>
-          </Card>
+          </div>
         ) : (
-          products?.map((product) => (
-            <Card key={product._id} className="admin-product-card">
-            <div className="product-image">
-              {product.images?.[0] ? (
-                <img src={product.images[0]} alt={product?.name || 'Product'} />
-              ) : (
-                <div className="image-placeholder"><ImageIcon size={40} /></div>
-              )}
-              <Badge variant={product?.status === 'Live' ? 'success' : 'warning'} className="status-badge">
-                {product?.status}
-              </Badge>
-            </div>
-            <div className="product-info">
-              <h3>{product?.name}</h3>
-              <p className="category">{product?.category}</p>
-              <div className="price-row">
-                <span className="price-container">
-                  {product?.oldPrice && product?.oldPrice > product?.price && (
-                    <span className="original-price" style={{ textDecoration: "line-through", color: "var(--color-text-muted)", marginRight: "8px", fontSize: "0.85em" }}>
-                      {CURRENCY_SYMBOL}{product?.oldPrice}
+          <table className="orders-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {products?.map((product) => (
+                <tr key={product._id}>
+                  <td>
+                    <div className="product-thumb">
+                      {product.images?.[0] ? (
+                        <img src={product.images[0]} alt={product.name || 'Product'} />
+                      ) : (
+                        <ImageIcon size={18} />
+                      )}
+                    </div>
+                  </td>
+                  <td><strong>{product?.name}</strong></td>
+                  <td>{product?.category}</td>
+                  <td>
+                    <span className="price">
+                      {product?.oldPrice && product?.oldPrice > product?.price && (
+                        <span className="original-price">{CURRENCY_SYMBOL}{product?.oldPrice} </span>
+                      )}
+                      {CURRENCY_SYMBOL}{product?.price}
                     </span>
-                  )}
-                  <span className="price">{CURRENCY_SYMBOL}{product?.price}</span>
-                </span>
-                <span className="stock">{product?.stock} in stock</span>
-              </div>
-              <div className="actions">
-                <Button variant="ghost" onClick={() => { setEditingProduct(product); setShowModal(true); }}>
-                  <Edit2 size={16} />
-                </Button>
-                <Button variant="ghost" className="delete-btn" onClick={() => handleDelete(product._id)} disabled={isProcessing}>
-                  <Trash2 size={16} />
-                </Button>
-              </div>
-            </div>
-          </Card>
-        )))}
-      </div>
+                  </td>
+                  <td>{product?.stock}</td>
+                  <td>
+                    <Badge variant={product?.status === 'Live' ? 'success' : 'warning'}>{product?.status}</Badge>
+                  </td>
+                  <td>
+                    <div className="action-buttons">
+                      <Button variant="ghost" onClick={() => { setEditingProduct(product); setShowModal(true); }}>
+                        <Edit2 size={16} />
+                      </Button>
+                      <Button variant="ghost" className="delete-btn" onClick={() => handleDelete(product._id)} disabled={isProcessing}>
+                        <Trash2 size={16} />
+                      </Button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Card>
 
       {showModal && (
         <ProductModal 
