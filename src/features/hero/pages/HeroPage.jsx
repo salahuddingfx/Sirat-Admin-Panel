@@ -215,7 +215,7 @@ export default function HeroPage() {
               <Input label="Description" name="description" defaultValue={currentSlide?.description} />
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 <Input label="Button Text" name="actionText" defaultValue={currentSlide?.actionText || "Shop Now"} />
-                <Input label="Order" name="order" type="number" defaultValue={currentSlide?.order || 0} />
+                <div></div>
               </div>
               {/* Link Type Toggle */}
               <div className="form-group">
