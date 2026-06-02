@@ -3,7 +3,7 @@ import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Play, Pause, RotateCcw }
 import { Button } from "./Button";
 import "./ImageGallery.css";
 
-export function ImageGallery({ images, initialIndex = 0, onClose }) {
+export function ImageGallery({ images, initialIndex = 0, onClose, alt = "Image" }) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [zoom, setZoom] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -150,7 +150,7 @@ export function ImageGallery({ images, initialIndex = 0, onClose }) {
           <img
             ref={imageRef}
             src={currentImage}
-            alt={`Product image ${currentIndex + 1}`}
+            alt={`${alt} ${currentIndex + 1}`}
             className="gallery-image"
             draggable={false}
             style={{
