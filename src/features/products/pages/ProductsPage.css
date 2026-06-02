@@ -1,3 +1,29 @@
+.products-page .orders-card {
+  padding: 0;
+  overflow-x: auto;
+}
+
+.products-page .orders-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.products-page .orders-table th {
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  background: var(--color-surface-soft);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+}
+
+.products-page .orders-table td {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
 .product-thumb {
   width: 48px;
   height: 48px;
