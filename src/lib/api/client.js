@@ -19,5 +19,17 @@ export function createApiClient(baseURL, getToken) {
     return config;
   });
 
+  client.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("sirat_admin_user");
+        localStorage.removeItem("sirat_admin_token");
+        window.location.href = "/";
+      }
+      return Promise.reject(error);
+    }
+  );
+
   return client;
 }
