@@ -1,3 +1,9 @@
+# Set correct MIME types for JavaScript and Manifest files
+<IfModule mod_mime.c>
+  AddType application/javascript .js
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
 Options -MultiViews
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
