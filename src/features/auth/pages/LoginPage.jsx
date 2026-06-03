@@ -37,9 +37,9 @@ export function LoginPage({ onLogin }) {
         <form onSubmit={handleSubmit} className="login-form">
           <Input
             id="admin-email"
-            type="email"
-            label="Email Address"
-            placeholder="admin@siratclothing.com"
+            type="text"
+            label="Email, Username, or Phone"
+            placeholder="johndoe@example.com or johndoe"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
