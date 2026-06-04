@@ -101,7 +101,7 @@ export function OrderDetailModal({ order, onClose, onSave, onPaymentStatusChange
               {order.items?.map((item, i) => (
                 <div key={i} className="order-item-row">
                   <img
-                    src={item.product?.images?.[0] || "/placeholder.png"}
+                    src={item.product?.images?.[0]?.url || item.product?.images?.[0] || "/placeholder.png"}
                     alt={item.product?.name || "Product"}
                     className="order-item-detail-thumb"
                   />
