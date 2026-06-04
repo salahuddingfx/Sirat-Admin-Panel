@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { FeaturePlaceholder } from "../components/layout/FeaturePlaceholder";
-import { Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings, Zap } from "lucide-react";
+import { Boxes, ShoppingBag, Users, MessageSquare, BadgePercent, Settings, Zap, UserCog } from "lucide-react";
 
 const DashboardPage = lazy(() => import("../features/dashboard/pages/DashboardPage").then(module => ({ default: module.DashboardPage })));
 const OrdersPage = lazy(() => import("../features/orders/pages/OrdersPage").then(module => ({ default: module.OrdersPage })));
@@ -16,6 +16,7 @@ const SalesPage = lazy(() => import("../features/sales/pages/SalesPage").then(mo
 const CategoriesPage = lazy(() => import("../features/categories/pages/CategoriesPage").then(module => ({ default: module.CategoriesPage })));
 const FlashSalePage = lazy(() => import("../features/flashSale/pages/FlashSalePage"));
 const AnalyticsPage = lazy(() => import("../features/analytics/pages/AnalyticsPage").then(module => ({ default: module.AnalyticsPage })));
+const TeamPage = lazy(() => import("../features/team/pages/TeamPage"));
 
 export function AppRouter() {
   return (
@@ -34,6 +35,7 @@ export function AppRouter() {
       <Route path="/flash-sale" element={<FlashSalePage />} />
       <Route path="/analytics" element={<AnalyticsPage />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/team" element={<TeamPage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
