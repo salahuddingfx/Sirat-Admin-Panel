@@ -122,8 +122,8 @@
 }
 
 .gallery-thumb {
-  width: 56px;
-  height: 56px;
+  width: 300px;
+  height: 300px;
   border-radius: 6px;
   overflow: hidden;
   border: 2px solid transparent;
