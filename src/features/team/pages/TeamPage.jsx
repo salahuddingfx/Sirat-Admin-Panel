@@ -30,6 +30,7 @@ export default function TeamPage() {
   const [avatarFile, setAvatarFile] = useState(null);
   const [avatarPreview, setAvatarPreview] = useState(null);
   const fileRef = useRef(null);
+  const initialFetchDone = useRef(false);
 
   const loadMembers = async (signal) => {
     try {
@@ -37,8 +38,12 @@ export default function TeamPage() {
       if (res.success) setMembers(res.data);
     } catch (err) {
       if (err.name !== "CanceledError" && err.name !== "AbortError") {
+        if (err.response?.status === 429) {
+          triggerAdminToast("Server is busy, please wait a moment and refresh.", "error");
+        } else {
+          triggerAdminToast("Failed to load team members", "error");
+        }
         console.error(err);
-        triggerAdminToast("Failed to load team members", "error");
       }
     } finally {
       setLoading(false);
@@ -46,6 +51,8 @@ export default function TeamPage() {
   };
 
   useEffect(() => {
+    if (initialFetchDone.current) return;
+    initialFetchDone.current = true;
     const controller = new AbortController();
     loadMembers(controller.signal);
     return () => controller.abort();
@@ -109,17 +116,26 @@ export default function TeamPage() {
     setIsSubmitting(true);
     try {
       if (currentMember) {
-        await updateTeamMember(currentMember._id, fd);
+        const res = await updateTeamMember(currentMember._id, fd);
+        if (res?.success && res.data) {
+          setMembers((prev) => prev.map((m) => (m._id === currentMember._id ? res.data : m)));
+        }
         triggerAdminToast("Team member updated", "success");
       } else {
-        await createTeamMember(fd);
+        const res = await createTeamMember(fd);
+        if (res?.success && res.data) {
+          setMembers((prev) => [...prev, res.data]);
+        }
         triggerAdminToast("Team member created", "success");
       }
       closeModal();
-      loadMembers();
     } catch (err) {
       console.error(err);
-      const msg = err.response?.data?.message || err.message || "Failed to save";
+      const status = err.response?.status;
+      const msg =
+        status === 429
+          ? "Server is rate-limiting requests. Please wait a moment and try again."
+          : err.response?.data?.message || err.message || "Failed to save";
       triggerAdminToast(msg, "error");
     } finally {
       setIsSubmitting(false);
