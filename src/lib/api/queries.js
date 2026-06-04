@@ -272,3 +272,28 @@ export const fetchAnalyticsSessions = async (limit = 50) => {
   const response = await api.get(`/admin/analytics/sessions?limit=${limit}`);
   return response.data;
 };
+
+// Team Members
+export const fetchAllTeamMembers = async (options = {}) => {
+  const response = await api.get("/admin/team", options);
+  return response.data;
+};
+
+export const createTeamMember = async (formData) => {
+  const response = await api.post("/admin/team", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
+};
+
+export const updateTeamMember = async (id, formData) => {
+  const response = await api.put(`/admin/team/${id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return response.data;
+};
+
+export const deleteTeamMember = async (id) => {
+  const response = await api.delete(`/admin/team/${id}`);
+  return response.data;
+};
