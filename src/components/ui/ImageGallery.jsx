@@ -3,7 +3,8 @@ import { X, ChevronLeft, ChevronRight, ZoomIn, ZoomOut, Play, Pause, RotateCcw }
 import { Button } from "./Button";
 import "./ImageGallery.css";
 
-export function ImageGallery({ images, initialIndex = 0, onClose, alt = "Image" }) {
+export function ImageGallery({ images = [], initialIndex = 0, onClose, alt = "Image" }) {
+  const imageUrls = images.map(img => typeof img === 'string' ? img : img?.url).filter(Boolean);
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [zoom, setZoom] = useState(1);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -13,9 +14,9 @@ export function ImageGallery({ images, initialIndex = 0, onClose, alt = "Image" 
   const intervalRef = useRef(null);
   const imageRef = useRef(null);
 
-  const currentImage = images[currentIndex];
+  const currentImage = imageUrls[currentIndex];
   const hasPrev = currentIndex > 0;
-  const hasNext = currentIndex < images.length - 1;
+  const hasNext = currentIndex < imageUrls.length - 1;
 
   const goTo = useCallback((index) => {
     setCurrentIndex(index);
@@ -51,7 +52,7 @@ export function ImageGallery({ images, initialIndex = 0, onClose, alt = "Image" 
       intervalRef.current = setInterval(() => {
         setCurrentIndex(prev => {
           const next = prev + 1;
-          if (next >= images.length) {
+          if (next >= imageUrls.length) {
             setIsPlaying(false);
             return prev;
           }
@@ -62,7 +63,7 @@ export function ImageGallery({ images, initialIndex = 0, onClose, alt = "Image" 
       }, 3000);
     }
     return () => clearInterval(intervalRef.current);
-  }, [isPlaying, images.length]);
+  }, [isPlaying, imageUrls.length]);
 
   useEffect(() => {
     if (!onClose) return;
