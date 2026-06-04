@@ -96,7 +96,7 @@ export function ProductsPage() {
                   <td>
                     <div className="product-thumb">
                       {product.images?.[0] ? (
-                        <img src={product.images[0]} alt={product.name || 'Product'} />
+                        <img src={product.images[0]?.url || product.images[0]} alt={product.name || 'Product'} />
                       ) : (
                         <ImageIcon size={18} />
                       )}
