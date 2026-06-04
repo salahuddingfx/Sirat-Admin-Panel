@@ -190,7 +190,7 @@ function ProductModal({ product, onClose, onRefresh }) {
     packagingCost: product?.packagingCost || "",
     managementCost: product?.managementCost || "",
     otherCost: product?.otherCost || "",
-    category: product?.category || "",
+    category: product?.category?.name || product?.category || "",
     featured: product?.featured || false,
     status: product?.status || "Live"
   });
