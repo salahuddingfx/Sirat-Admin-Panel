@@ -103,7 +103,7 @@ export function ProductsPage() {
                     </div>
                   </td>
                   <td><strong>{product?.name}</strong></td>
-                  <td>{product?.category}</td>
+                  <td>{product?.category?.name || product?.category || "—"}</td>
                   <td>
                     <span className="price">
                       {product?.oldPrice && product?.oldPrice > product?.price && (
