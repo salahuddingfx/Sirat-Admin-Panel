@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import { Printer, ShoppingBag, CheckCircle, XCircle, Eye, Trash2, AlertTriangle } from "lucide-react";
+import { Printer, ShoppingBag, CheckCircle, XCircle, Eye, Trash2, AlertTriangle, X, FileText } from "lucide-react";
 import { fetchOrders, updateOrderStatus, updatePaymentStatus, updateOrderDetails, deleteOrder } from "../../../lib/api/queries";
 import { Button, Card, SectionHeader, Badge } from "../../../components/ui";
-import { OrderInvoice } from "../components/OrderInvoice";
+import { OrderInvoice, SIZES } from "../components/OrderInvoice";
 import { OrderDetailModal } from "../components/OrderDetailModal";
 import { CURRENCY_SYMBOL, UI_STRINGS } from "../../../lib/constants";
 import { triggerAdminToast } from "../../../components/ui/AdminToast";
@@ -14,6 +14,8 @@ export function OrdersPage() {
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [invoiceSize, setInvoiceSize] = useState("a4");
+  const [printModal, setPrintModal] = useState(null); // order awaiting size pick
   const [detailOrder, setDetailOrder] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const invoiceRef = useRef();
@@ -21,6 +23,18 @@ export function OrdersPage() {
   const handlePrint = useReactToPrint({
     contentRef: invoiceRef,
   });
+
+  const openPrintPicker = (order) => {
+    setPrintModal(order);
+  };
+
+  const confirmPrint = (sizeKey) => {
+    setInvoiceSize(sizeKey);
+    setSelectedOrder(printModal);
+    setPrintModal(null);
+    // wait for React to mount the invoice at the new size, then print
+    setTimeout(() => handlePrint(), 120);
+  };
 
   const loadOrders = async (signal) => {
     try {
@@ -244,10 +258,7 @@ export function OrdersPage() {
                       </Button>
                       <Button
                         variant="ghost"
-                        onClick={() => {
-                          setSelectedOrder(order);
-                          setTimeout(handlePrint, 100);
-                        }}
+                        onClick={() => openPrintPicker(order)}
                         title="Print Invoice"
                       >
                         <Printer size={16} />
@@ -265,8 +276,60 @@ export function OrdersPage() {
       </Card>
 
       <div style={{ display: "none" }}>
-        <OrderInvoice ref={invoiceRef} order={selectedOrder} />
+        <OrderInvoice ref={invoiceRef} order={selectedOrder} size={invoiceSize} />
       </div>
+
+      {printModal && (
+        <div className="modal-overlay" onClick={() => setPrintModal(null)}>
+          <div
+            className="modal-content print-size-picker"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="print-size-picker__head">
+              <div className="print-size-picker__icon">
+                <Printer size={20} />
+              </div>
+              <div>
+                <h3 style={{ margin: 0 }}>Print Invoice</h3>
+                <p className="muted" style={{ margin: "2px 0 0", fontSize: "0.82rem" }}>
+                  Order <strong>#{printModal.orderId}</strong> — choose a paper size.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPrintModal(null)}
+                style={{ marginLeft: "auto", background: "none", border: "none", cursor: "pointer", color: "var(--color-text-muted)" }}
+                title="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="print-size-picker__grid">
+              {SIZES.map((s) => (
+                <button
+                  key={s.key}
+                  type="button"
+                  className="print-size-card"
+                  onClick={() => confirmPrint(s.key)}
+                >
+                  <div className={`print-size-card__preview print-size-card__preview--${s.key}`}>
+                    <FileText size={s.key === "1_5in" ? 16 : s.key === "1in" ? 18 : 22} />
+                  </div>
+                  <div className="print-size-card__body">
+                    <div className="print-size-card__label">{s.label}</div>
+                    <div className="print-size-card__hint">{s.hint}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="print-size-picker__foot muted">
+              Header and footer are fixed and will repeat on every page.
+            </div>
+          </div>
+        </div>
+      )}
 
       {detailOrder && (
         <OrderDetailModal order={detailOrder} onClose={() => setDetailOrder(null)} onSave={handleDetailSave} onPaymentStatusChange={handlePaymentStatusFromModal} />
