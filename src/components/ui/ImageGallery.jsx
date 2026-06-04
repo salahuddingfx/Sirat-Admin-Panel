@@ -168,9 +168,9 @@ export function ImageGallery({ images = [], initialIndex = 0, onClose, alt = "Im
         )}
       </div>
 
-      {images.length > 1 && (
+      {imageUrls.length > 1 && (
         <div className="gallery-thumbnails" onClick={(e) => e.stopPropagation()}>
-          {images.map((img, i) => (
+          {imageUrls.map((img, i) => (
             <button
               key={i}
               className={`gallery-thumb ${i === currentIndex ? "gallery-thumb--active" : ""}`}
