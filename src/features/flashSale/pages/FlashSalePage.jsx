@@ -188,7 +188,7 @@ export default function FlashSalePage() {
                   onChange={() => toggleProduct(p._id)}
                 />
                 <div className="product-select-thumb">
-                  {p.images?.[0] ? <img src={p.images[0]} alt={p.name} /> : <Zap size={14} />}
+                  {p.images?.[0] ? <img src={p.images[0]?.url || p.images[0]} alt={p.name} /> : <Zap size={14} />}
                 </div>
                 <div className="product-select-info">
                   <strong>{p.name}</strong>
