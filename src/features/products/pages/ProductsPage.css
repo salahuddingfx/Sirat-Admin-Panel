@@ -27,8 +27,9 @@
 }
 
 .product-thumb {
-  width: 48px;
-  height: 48px;
+  width: 300px;
+  height: 300px;
+  max-width: 100%;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--color-surface-soft);
@@ -36,6 +37,7 @@
   align-items: center;
   justify-content: center;
   color: var(--color-border-strong);
+  flex-shrink: 0;
 }
 
 .product-thumb img {
@@ -94,8 +96,9 @@
 
 .image-preview-item {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 500px;
+  height: 500px;
+  max-width: 100%;
   border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid var(--color-border);
@@ -225,8 +228,8 @@
   }
 
   .product-thumb {
-    width: 36px;
-    height: 36px;
+    width: 300px;
+    height: 300px;
   }
 }
 
