@@ -101,7 +101,7 @@ export function ImageGallery({ images = [], initialIndex = 0, onClose, alt = "Im
     else handleZoomOut();
   };
 
-  if (!images || images.length === 0) return null;
+  if (!imageUrls || imageUrls.length === 0) return null;
 
   return (
     <div
@@ -112,7 +112,7 @@ export function ImageGallery({ images = [], initialIndex = 0, onClose, alt = "Im
       onMouseLeave={handleMouseUp}
     >
       <div className="gallery-toolbar">
-        <div className="gallery-counter">{currentIndex + 1} / {images.length}</div>
+        <div className="gallery-counter">{currentIndex + 1} / {imageUrls.length}</div>
         <div className="gallery-toolbar-center">
           <Button variant="ghost" onClick={handleZoomOut} title="Zoom Out (-)" className="gallery-btn">
             <ZoomOut size={18} />
