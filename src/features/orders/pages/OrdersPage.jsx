@@ -182,7 +182,7 @@ export function OrdersPage() {
                       {order.items?.slice(0, 3).map((item, i) => (
                         <img
                           key={i}
-                          src={item.product?.images?.[0] || "/placeholder.png"}
+                          src={item.product?.images?.[0]?.url || item.product?.images?.[0] || "/placeholder.png"}
                           alt={item.product?.name || "Product"}
                           className="order-item-thumb"
                           title={item.product?.name || "Product"}
