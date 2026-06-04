@@ -10,6 +10,11 @@
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   position: relative;
   line-height: 1.5;
+  /* Flex column so the on-screen preview pins the footer to the bottom
+     of the viewport when the content is shorter than one page. */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* The outer table fills the printable area. thead/tfoot repeat on each page. */
@@ -18,11 +23,22 @@
   border-collapse: collapse;
   border-spacing: 0;
   table-layout: fixed;
+  /* Let the table grow to fill the flex container so the tfoot is pushed
+     to the bottom of the on-screen viewport. */
+  flex: 1 1 auto;
 }
 
 .inv-outer thead { display: table-header-group; }
 .inv-outer tfoot { display: table-footer-group; }
 .inv-td-head, .inv-td-body, .inv-td-foot { padding: 0; }
+
+/* Stretch the body cell so the footer sits at the bottom of the page in
+   the on-screen preview. `vertical-align: top` keeps content at the top
+   of the cell while the cell itself grows. */
+.inv-td-body {
+  height: 100%;
+  vertical-align: top;
+}
 
 /* =========================================================
    DEFAULT — A4
@@ -459,10 +475,18 @@
     position: absolute;
     left: 0; top: 0;
     width: 100%;
+    min-height: 0 !important;
     box-shadow: none;
     border-radius: 0;
     max-width: none !important;
     margin: 0 !important;
+    display: block !important;
+  }
+  .inv-outer {
+    flex: none !important;
+  }
+  .inv-td-body {
+    height: auto !important;
   }
   .inv-paid-stamp { opacity: 0.5; }
   .inv-outer thead { display: table-header-group; }
