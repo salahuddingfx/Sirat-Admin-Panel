@@ -75,12 +75,16 @@ export const fetchHeroSlides = async (options = {}) => {
 };
 
 export const createHeroSlide = async (slideData) => {
-  const response = await api.post("/admin/hero", slideData);
+  const response = await api.post("/admin/hero", slideData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return response.data;
 };
 
 export const updateHeroSlide = async (id, slideData) => {
-  const response = await api.put(`/admin/hero/${id}`, slideData);
+  const response = await api.put(`/admin/hero/${id}`, slideData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return response.data;
 };
 
