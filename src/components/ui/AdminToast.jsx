@@ -45,17 +45,47 @@ export default function AdminToast() {
             right: "2rem",
             background: "var(--sirat-surface)",
             border: `1px solid var(--sirat-border)`,
-            borderLeft: `4px solid ${toast.type === 'success' ? '#10B981' : toast.type === 'error' ? '#EF4444' : toast.type === 'warning' ? '#F59E0B' : 'var(--sirat-gold)'}`,
-            padding: "1rem 1.5rem",
+            padding: "1rem 1.5rem 1rem 1.75rem",
             borderRadius: "12px",
             boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
             display: "flex",
             alignItems: "center",
             gap: "0.75rem",
             zIndex: 9999,
-            minWidth: "300px"
+            minWidth: "300px",
+            overflow: "hidden"
           }}
         >
+          {/* Left accent border with matching rounded corner */}
+          <div 
+            style={{
+              position: "absolute",
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: "4px",
+              background: toast.type === 'success' ? '#10B981' : toast.type === 'error' ? '#EF4444' : toast.type === 'warning' ? '#F59E0B' : 'var(--sirat-gold)',
+              borderRadius: "12px 0 0 12px"
+            }}
+          />
+
+          {/* Bottom progress bar with matching rounded corners */}
+          <motion.div 
+            key={toast.message}
+            initial={{ width: "100%" }}
+            animate={{ width: "0%" }}
+            transition={{ duration: 3.5, ease: "linear" }}
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              height: "3px",
+              background: toast.type === 'success' ? '#10B981' : toast.type === 'error' ? '#EF4444' : toast.type === 'warning' ? '#F59E0B' : 'var(--sirat-gold)',
+              borderBottomLeftRadius: "12px",
+              borderBottomRightRadius: "12px"
+            }}
+          />
+
           {icons[toast.type]}
           <span style={{ fontSize: "0.9rem", fontWeight: "500", color: "var(--sirat-text-main)" }}>
             {toast.message}
